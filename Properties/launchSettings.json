@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "flow-desktop (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "flow-desktop (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
