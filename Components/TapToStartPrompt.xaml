@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="flow_desktop.Components.TapToStartPrompt"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:flow_desktop.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Storyboard x:Name="BlinkingAnimation"
+                    RepeatBehavior="Forever">
+            <DoubleAnimation
+                Storyboard.TargetName="TapToStartButton"
+                Storyboard.TargetProperty="Opacity"
+                From="0.85" To="0.2"
+                Duration="0:0:0.7"
+                AutoReverse="True"/>
+        </Storyboard>
+    </UserControl.Resources>
+    
+    <Border x:Name="TapToStartButton"
+            Background="Transparent"
+            Tapped="OnClick">
+        <TextBlock Text="tap to start"
+                   FontSize="24"
+                   Foreground="{StaticResource BrushTelli}"
+                   />
+
+    </Border>
+   
+</UserControl>
