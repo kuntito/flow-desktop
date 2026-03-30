@@ -10,7 +10,7 @@
 
     <Border CornerRadius="32"
             Background="{StaticResource ColorAguero}"
-            Padding="10,0,10,0"
+            Padding="16,0,10,0"
             Height="48"
             Width="444"
             >

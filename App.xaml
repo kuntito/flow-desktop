@@ -11,6 +11,8 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+
+            <!-- colors -->
             <Color x:Key="ColorKDB">#030303</Color>
             <Color x:Key="ColorSane">#111111</Color>
             <Color x:Key="ColorAguero">#181818</Color>
@@ -19,6 +21,16 @@
             <Color x:Key="ColorIsco">#4D4D4D</Color>
             <Color x:Key="ColorRaze">#68B439</Color>
             <Color x:Key="ColorDebit">#FD5273</Color>
+
+            <!-- brushes -->
+            <SolidColorBrush x:Key="BrushKDB" Color="{StaticResource ColorKDB}"/>
+            <SolidColorBrush x:Key="BrushSane" Color="{StaticResource ColorSane}"/>
+            <SolidColorBrush x:Key="BrushAguero" Color="{StaticResource ColorAguero}"/>
+            <SolidColorBrush x:Key="BrushTelli" Color="{StaticResource ColorTelli}"/>
+            <SolidColorBrush x:Key="BrushMarcelo" Color="{StaticResource ColorMarcelo}"/>
+            <SolidColorBrush x:Key="BrushIsco" Color="{StaticResource ColorIsco}"/>
+            <SolidColorBrush x:Key="BrushRaze" Color="{StaticResource ColorRaze}"/>
+            <SolidColorBrush x:Key="BrushDebit" Color="{StaticResource ColorDebit}"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
