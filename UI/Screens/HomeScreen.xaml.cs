@@ -16,11 +16,11 @@ using Microsoft.UI.Xaml.Navigation;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace flow_desktop.UI.Components;
+namespace flow_desktop.UI.Screens;
 
-public sealed partial class AppTitleBar : UserControl
+public sealed partial class HomeScreen : UserControl
 {
-    public AppTitleBar()
+    public HomeScreen()
     {
         InitializeComponent();
     }

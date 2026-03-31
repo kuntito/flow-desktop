@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl
-    x:Class="flow_desktop.Components.SearchBar"
+    x:Class="flow_desktop.UI.Components.SearchBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:flow_desktop.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Border CornerRadius="32"
+    <Border CornerRadius="20"
             Background="{StaticResource ColorAguero}"
             Padding="16,0,10,0"
-            Height="48"
+            Height="40"
             Width="444"
             >
         <Grid

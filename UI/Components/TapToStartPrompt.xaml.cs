@@ -17,7 +17,7 @@ using Microsoft.UI.Input;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace flow_desktop.Components;
+namespace flow_desktop.UI.Components;
 
 public sealed partial class TapToStartPrompt : UserControl
 {

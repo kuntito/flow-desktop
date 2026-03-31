@@ -49,8 +49,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Screens\" />
     <Folder Include="UI\Components\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UI\Screens\HomeScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--
