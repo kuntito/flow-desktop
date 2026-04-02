@@ -18,27 +18,19 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace flow_desktop.UI.Components;
 
-public sealed partial class SongTitleAndArtistSLI : UserControl
+public sealed partial class SongTitleAndArtistSP : UserControl
 {
-    public static readonly DependencyProperty SongTitleProperty =
-    DependencyProperty.Register(
-        nameof(SongTitle),
-        typeof(string),
-        typeof(SongTitleAndArtistSLI),
-        new PropertyMetadata(string.Empty)
-    );
-
     public string SongTitle
     {
         get => (string)GetValue(SongTitleProperty);
         set => SetValue(SongTitleProperty, value);
     }
 
-    public static readonly DependencyProperty ArtistStrProperty =
+    public static readonly DependencyProperty SongTitleProperty =
         DependencyProperty.Register(
-            nameof(ArtistStr),
+            nameof(SongTitle),
             typeof(string),
-            typeof(SongTitleAndArtistSLI),
+            typeof(SongTitleAndArtistSP),
             new PropertyMetadata(string.Empty)
         );
 
@@ -48,7 +40,15 @@ public sealed partial class SongTitleAndArtistSLI : UserControl
         set => SetValue(ArtistStrProperty, value);
     }
 
-    public SongTitleAndArtistSLI()
+    public static readonly DependencyProperty ArtistStrProperty =
+        DependencyProperty.Register(
+            nameof(ArtistStr),
+            typeof(string),
+            typeof(SongTitleAndArtistSP),
+            new PropertyMetadata(string.Empty)
+        );
+
+    public SongTitleAndArtistSP()
     {
         InitializeComponent();
     }
