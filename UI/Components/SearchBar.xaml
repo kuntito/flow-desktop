@@ -5,53 +5,102 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:models="using:flow_desktop.Models"
     mc:Ignorable="d">
 
-    <Border CornerRadius="20"
-            Background="{StaticResource ColorAguero}"
-            Padding="16,0,10,0"
-            Height="40"
-            Width="444"
-            >
-        <Grid
-            ColumnSpacing="8"
-            VerticalAlignment="Center"
-            >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <x:Double x:Key="SearchBarWidth">444</x:Double>
+        <x:Double x:Key="SearchBarHeight">40</x:Double>
+        
+        <!-- search bar height (40) + gap (16) -->
+        <x:Double x:Key="VerticalOffsetSearchResultsPopup">56</x:Double>
+        <x:Double x:Key="SearchResultsPopupHeight">304</x:Double>
+    </UserControl.Resources>
 
-            <Image Source="ms-appx:///Assets/ic_search.png"
-                   Width="24"
-                   Height="24"
-                   Grid.Column="0"/>
+    <Grid>
+        <Border CornerRadius="20"
+                Background="{StaticResource ColorAguero}"
+                Padding="16,0,10,0"
+                Height="{StaticResource SearchBarHeight}"
+                Width="{StaticResource SearchBarWidth}"
+                >
+            <Grid
+                ColumnSpacing="8"
+                VerticalAlignment="Center"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox 
-                Grid.Column="1"
-                Background="Transparent"
-                BorderThickness="0"
-                FontSize="18"
-            >
-                <TextBox.Resources>
-                    <!-- to make text box transparent in all states -->
-                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
-                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
-                    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
-                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent"/>
+                <Image Source="ms-appx:///Assets/ic_search.png"
+                       Width="24"
+                       Height="24"
+                       Grid.Column="0"/>
+
+                <TextBox 
+                    Grid.Column="1"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    FontSize="18"
+                >
+                    <TextBox.Resources>
+                        <!-- to make text box transparent in all states -->
+                        <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+                        <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+                        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+                        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent"/>
                     
-                    <!-- change icon size for clear text button -->
-                    <x:Double x:Key="TextBoxIconFontSize">20</x:Double>
+                        <!-- change icon size for clear text button -->
+                        <x:Double x:Key="TextBoxIconFontSize">20</x:Double>
 
-                    <!-- change colors for clear text button -->
-                    <SolidColorBrush x:Key="TextControlButtonForeground" Color="{StaticResource ColorTelli}"/>
-                    <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="{StaticResource ColorTelli}"/>
-                    <SolidColorBrush x:Key="TextControlButtonForegroundPressed" Color="{StaticResource ColorTelli}"/>
-                </TextBox.Resources>
+                        <!-- change colors for clear text button -->
+                        <SolidColorBrush x:Key="TextControlButtonForeground" Color="{StaticResource ColorTelli}"/>
+                        <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="{StaticResource ColorTelli}"/>
+                        <SolidColorBrush x:Key="TextControlButtonForegroundPressed" Color="{StaticResource ColorTelli}"/>
+                    </TextBox.Resources>
                 
-            </TextBox>
-        </Grid>
+                </TextBox>
+            </Grid>
 
-    </Border>
+        </Border>
+
+        <Popup
+            x:Name="SongSearchResultsPopup"
+            IsOpen="False"
+            HorizontalOffset="0"
+            VerticalOffset="{StaticResource VerticalOffsetSearchResultsPopup}">
+
+            <Border Background="{StaticResource BrushAguero}"
+                    CornerRadius="8"
+                    Width="{StaticResource SearchBarWidth}"
+                    Height="{StaticResource SearchResultsPopupHeight}"
+                    Padding="8,16,8,0"
+                    >
+                <!-- adds 16 px padding to the last list item -->
+                <ListView x:Name="SongSearchResultsListView"
+                          Padding="0,0,0,8"
+                    >
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Margin" Value="8,0,0,8"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Song">
+                            <components:SongSearchSLI 
+                                SongTitle="{x:Bind Title}"
+                                ArtistStr="{x:Bind ArtistStr}"/>
+                        </DataTemplate>
+                        
+                    </ListView.ItemTemplate>
+                    
+                </ListView>
+            </Border>
+            
+        </Popup>
+    </Grid>
     
 </UserControl>

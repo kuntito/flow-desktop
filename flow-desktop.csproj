@@ -16,7 +16,7 @@
   <ItemGroup>
     <Content Include="Assets\**" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
@@ -34,6 +34,16 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="UI\Components\SongSearchSLI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UI\Components\AlbumArtSLI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Components\TapToStartPrompt.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -49,7 +59,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Components\" />
+    <Page Update="UI\Components\SongTitleAndArtistSLI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UI\Screens\HomeScreen.xaml">
