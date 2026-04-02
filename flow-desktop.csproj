@@ -34,6 +34,11 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="UI\Components\SeekBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="UI\Components\AlbumArtSongInfoSP.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
