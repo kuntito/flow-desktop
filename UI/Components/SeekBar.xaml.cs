@@ -93,4 +93,18 @@ public sealed partial class SeekBar : UserControl
         storyboard.Children.Add(animationValue);
         storyboard.Begin();
     }
+
+    public static readonly DependencyProperty SizeProperty =
+        DependencyProperty.Register(
+            nameof(SeekBarWidth),
+            typeof(double),
+            typeof(SeekBar),
+            new PropertyMetadata(0.0)
+        );
+
+    public double SeekBarWidth
+    {
+        get => (double)GetValue(SizeProperty);
+        set => SetValue(SizeProperty, value);
+    }
 }

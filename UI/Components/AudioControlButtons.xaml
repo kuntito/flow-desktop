@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="flow_desktop.UI.Components.AudioControlButtons"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+    <Grid
+        Width="{x:Bind ContainerWidth, Mode=OneWay}"
+        >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border 
+            Width="{StaticResource AudioControlIconRippleSize}"
+            Grid.Column="0"
+        />
+        <components:PrevPlayPauseNextButtons
+            Grid.Column="2"
+        />
+        <components:SongRepeatButton
+            Size="{StaticResource AudioControlIconRippleSize}"
+            Grid.Column="4"
+        />
+    </Grid>
+</UserControl>

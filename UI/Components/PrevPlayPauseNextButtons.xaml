@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="flow_desktop.UI.Components.PrevPlayPauseNextButtons"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <x:Double x:Key="LeftSpacing">16</x:Double>
+
+        <!-- `rightSpacing` is less than `leftSpacing`.
+        
+        play pause icon is a right facing triangle
+        it's bigger on the left side and tapers towards the right.
+        
+        when `leftSpacing` and `rightSpacing` are equal,
+        it gives the illusion
+        that the right spacing is larger.
+        -->
+        <x:Double x:Key="RightSpacing">12</x:Double>
+    </UserControl.Resources>
+
+    <StackPanel
+        Orientation="Horizontal"
+    >
+        <components:PrevButton />
+        <Border Width="{StaticResource LeftSpacing}" />
+        <components:PlayPauseButton />
+        <Border Width="{StaticResource RightSpacing}" />
+        <components:NextButton />
+    </StackPanel>
+</UserControl>

@@ -18,7 +18,6 @@ using Microsoft.UI.Xaml.Media.Imaging;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-// TODO start here, add cursor on hover of play pause button
 namespace flow_desktop.UI.Components
 {
     public sealed partial class PlayPauseButton : UserControl
@@ -78,7 +77,7 @@ namespace flow_desktop.UI.Components
 
         private void OnClick(
             object sender,
-            TappedRoutedEventArgs e
+            RoutedEventArgs e
         )
         {
             IsPlaying = !IsPlaying;

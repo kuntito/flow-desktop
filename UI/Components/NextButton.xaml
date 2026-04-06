@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="flow_desktop.UI.Components.NextButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:flow_desktop.UI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Button
+        Background="Transparent"
+        Click="OnClick"
+        Padding="0"
+        Width="{StaticResource AudioControlIconRippleSize}"
+        Height="{StaticResource AudioControlIconRippleSize}"
+        CornerRadius="{StaticResource AudioControlIconCornerRadius}"
+        BorderThickness="0"
+    >
+        <Image
+            Source="/Assets/ic_next.png"
+            Width="{StaticResource AudioControlIconSize}"
+            Height="{StaticResource AudioControlIconSize}"
+            />
+
+    </Button>
+</UserControl>
