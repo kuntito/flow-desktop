@@ -28,7 +28,11 @@
     >
         <components:PrevButton />
         <Border Width="{StaticResource LeftSpacing}" />
-        <components:PlayPauseButton />
+        <components:PlayPauseButton
+            IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
+            OnPlay="HandlePlay"
+            OnPause="HandlePause"
+            />
         <Border Width="{StaticResource RightSpacing}" />
         <components:NextButton />
     </StackPanel>

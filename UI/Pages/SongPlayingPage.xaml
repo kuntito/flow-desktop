@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="flow_desktop.UI.Pages.SongPlayingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:flow_desktop.UI.Pages"
+    xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <GridLength x:Key="AudioControlFrameHeight">128</GridLength>
+    </Page.Resources>
+
+    <Grid
+    >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource AudioControlFrameHeight}" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{StaticResource AudioControlFrameHeight}" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+        />
+
+        <components:AlbumArtSongInfoSP
+            SongTitle="{x:Bind ViewModel.SongTitle, Mode=OneWay, FallbackValue='...'}"
+            ArtistStr="{x:Bind ViewModel.ArtistStr, Mode=OneWay, FallbackValue='...'}"
+            Grid.Row="1"
+        />
+
+        <Border
+            Grid.Row="2"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+        >
+
+            <components:AudioControlSection
+                IsPlaying="{x:Bind ViewModel.IsPlaying, Mode=OneWay, FallbackValue=False}"
+                OnPlay="OnPlay"
+                OnPause="OnPause"
+                />
+        </Border>
+
+    </Grid>
+</Page>

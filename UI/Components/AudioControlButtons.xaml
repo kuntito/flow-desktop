@@ -26,6 +26,9 @@
         />
         <components:PrevPlayPauseNextButtons
             Grid.Column="2"
+            IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
+            OnPlay="HandlePlay"
+            OnPause="HandlePause"
         />
         <components:SongRepeatButton
             Size="{StaticResource AudioControlIconRippleSize}"

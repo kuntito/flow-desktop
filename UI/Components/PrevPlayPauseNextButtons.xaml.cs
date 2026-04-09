@@ -20,8 +20,37 @@ namespace flow_desktop.UI.Components;
 
 public sealed partial class PrevPlayPauseNextButtons : UserControl
 {
+
     public PrevPlayPauseNextButtons()
     {
         InitializeComponent();
+    }
+
+    public static readonly DependencyProperty IsPlayingProperty =
+        DependencyProperty.Register(
+            nameof(IsPlaying),
+            typeof(bool),
+            typeof(PrevPlayPauseNextButtons),
+            new PropertyMetadata(false)
+        );
+
+    public bool IsPlaying
+    {
+        get => (bool)GetValue(IsPlayingProperty);
+        set => SetValue(IsPlayingProperty, value);
+    }
+
+
+    public event EventHandler? OnPlay;
+    public event EventHandler? OnPause;
+
+    private void HandlePlay(object sender, EventArgs e)
+    {
+        OnPlay?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void HandlePause(object sender, EventArgs e)
+    {
+        OnPause?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -17,6 +17,9 @@
         <Border Width="32" />
         <components:AudioControlButtons 
             ContainerWidth="{StaticResource AudioControlSectionWidth}"
+            IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
+            OnPlay="HandlePlay"
+            OnPause="HandlePause"
             />
     </StackPanel>
 </UserControl>

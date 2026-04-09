@@ -22,23 +22,6 @@ namespace flow_desktop.UI.Components
 {
     public sealed partial class PlayPauseButton : UserControl
     {
-        public static readonly DependencyProperty IsPlayingProperty =
-            DependencyProperty.Register(
-                nameof(IsPlaying),
-                typeof(bool),
-                typeof(PlayPauseButton),
-                new PropertyMetadata(
-                    false,
-                    new PropertyChangedCallback(OnIsPlayingChanged)
-                )
-            );
-
-        public bool IsPlaying
-        {
-            get => (bool)GetValue(IsPlayingProperty);
-            set => SetValue(IsPlayingProperty, value);
-        }
-
         public PlayPauseButton()
         {
             InitializeComponent();
@@ -59,6 +42,24 @@ namespace flow_desktop.UI.Components
             };
         }
 
+        public static readonly DependencyProperty IsPlayingProperty =
+            DependencyProperty.Register(
+                nameof(IsPlaying),
+                typeof(bool),
+                typeof(PlayPauseButton),
+                new PropertyMetadata(
+                    false,
+                    new PropertyChangedCallback(OnIsPlayingChanged)
+                )
+            );
+
+        public bool IsPlaying
+        {
+            get => (bool)GetValue(IsPlayingProperty);
+            set => SetValue(IsPlayingProperty, value);
+        }
+
+
         private static void OnIsPlayingChanged(
             DependencyObject d,
             DependencyPropertyChangedEventArgs e
@@ -75,12 +76,22 @@ namespace flow_desktop.UI.Components
                 : new BitmapImage(new Uri("ms-appx:///Assets/ic_play.png"));
         }
 
+        public event EventHandler? OnPlay;
+        public event EventHandler? OnPause;
         private void OnClick(
             object sender,
             RoutedEventArgs e
         )
         {
-            IsPlaying = !IsPlaying;
+            if (IsPlaying)
+            {
+                OnPause?.Invoke(this, EventArgs.Empty);
+            }
+
+            else
+            {
+                OnPlay?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
