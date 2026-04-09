@@ -15,5 +15,13 @@ namespace flow_desktop.Models
         public string? AlbumArtUrl { get; set; }
         public string SongUrl { get; set; } = string.Empty;
 
+        public static Song DummySong => new Song
+        {
+            Id = 0,
+            Title = "Sound Helix",
+            ArtistStr = "Somebody",
+            DurationMillis = 150000,
+            SongUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        };
     }
 }
