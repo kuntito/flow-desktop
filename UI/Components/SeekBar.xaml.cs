@@ -107,4 +107,18 @@ public sealed partial class SeekBar : UserControl
         get => (double)GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
     }
+
+    public static readonly DependencyProperty PlayProgressProperty =
+        DependencyProperty.Register(
+            nameof(PlayProgress),
+            typeof(float),
+            typeof(SeekBar),
+            new PropertyMetadata(0.0f)
+        );
+
+    public float PlayProgress
+    {
+        get => (float)GetValue(PlayProgressProperty);
+        set => SetValue(PlayProgressProperty, value);
+    }
 }

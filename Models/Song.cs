@@ -21,6 +21,7 @@ namespace flow_desktop.Models
             Title = "Sound Helix",
             ArtistStr = "Somebody",
             DurationMillis = 150000,
+            AlbumArtUrl = "https://picsum.photos/500",
             SongUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         };
     }

@@ -39,6 +39,20 @@ public sealed partial class AudioControlSection : UserControl
         set => SetValue(IsPlayingProperty, value);
     }
 
+    public static readonly DependencyProperty PlayProgressProperty =
+        DependencyProperty.Register(
+            nameof(PlayProgress),
+            typeof(float),
+            typeof(AudioControlSection),
+            new PropertyMetadata(0.0f)
+        );
+
+    public float PlayProgress
+    {
+        get => (float)GetValue(PlayProgressProperty);
+        set => SetValue(PlayProgressProperty, value);
+    }
+
     public event EventHandler? OnPlay;
     public event EventHandler? OnPause;
 

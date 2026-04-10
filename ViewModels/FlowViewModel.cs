@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,10 @@ namespace flow_desktop.ViewModels
         public string ArtistStr => _playerState.LoadedSong?.ArtistStr ?? "...";
 
         public bool IsPlaying => _playerState.IsPlaying;
-        public int CurrentPositionMs => _playerState.CurrentPositionMs;
-        public int DurationMs => _playerState.DurationMs;
         public float PlayProgress => _playerState.PlayProgress;
+
+        private const string PlaceholderArtUrl = "https://sounds-xyz.s3.eu-north-1.amazonaws.com/albumArt/artworkUnknown.png";
+        public string AlbumArtUrl => _playerState.LoadedSong?.AlbumArtUrl ?? PlaceholderArtUrl;
 
         public FlowViewModel()
         {
@@ -33,11 +35,15 @@ namespace flow_desktop.ViewModels
 
             _songPlayer.OnStateChanged += (sender, ps) =>
             {
+                if (ps == null) return;
+                
                 _playerState = ps;
                 OnPropertyChanged(nameof(LoadedSong));
+                OnPropertyChanged(nameof(SongTitle));
+                OnPropertyChanged(nameof(ArtistStr));
+
                 OnPropertyChanged(nameof(IsPlaying));
-                OnPropertyChanged(nameof(CurrentPositionMs));
-                OnPropertyChanged(nameof(DurationMs));
+
                 OnPropertyChanged(nameof(PlayProgress));
             };
         }

@@ -94,7 +94,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="UI\Components\AlbumArtSP.xaml">
+    <Page Update="UI\Components\AlbumArtSongPlaying.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

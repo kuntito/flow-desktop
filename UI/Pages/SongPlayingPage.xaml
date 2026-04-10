@@ -28,6 +28,7 @@
         <components:AlbumArtSongInfoSP
             SongTitle="{x:Bind ViewModel.SongTitle, Mode=OneWay, FallbackValue='...'}"
             ArtistStr="{x:Bind ViewModel.ArtistStr, Mode=OneWay, FallbackValue='...'}"
+            AlbumArtUrl="{x:Bind ViewModel.AlbumArtUrl, Mode=OneWay, FallbackValue=''}"
             Grid.Row="1"
         />
 
@@ -39,6 +40,7 @@
 
             <components:AudioControlSection
                 IsPlaying="{x:Bind ViewModel.IsPlaying, Mode=OneWay, FallbackValue=False}"
+                PlayProgress="{x:Bind ViewModel.PlayProgress, Mode=OneWay, FallbackValue=0.0}"
                 OnPlay="OnPlay"
                 OnPause="OnPause"
                 />

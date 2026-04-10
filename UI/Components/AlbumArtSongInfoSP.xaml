@@ -12,7 +12,9 @@
     <StackPanel
         VerticalAlignment="Center"
         >
-        <components:AlbumArtSP />
+        <components:AlbumArtSongPlaying 
+            AlbumArtUrl="{x:Bind AlbumArtUrl, Mode=OneWay}"
+            />
         <Border Height="16" />
         <components:SongTitleAndArtistSP
             SongTitle="{x:Bind SongTitle, Mode=OneWay}"

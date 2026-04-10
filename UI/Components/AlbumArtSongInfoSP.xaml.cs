@@ -53,4 +53,18 @@ public sealed partial class AlbumArtSongInfoSP : UserControl
     {
         InitializeComponent();
     }
+
+    public static readonly DependencyProperty AlbumArtUrlProperty =
+        DependencyProperty.Register(
+            nameof(AlbumArtUrl),
+            typeof(string),
+            typeof(AlbumArtSongInfoSP),
+            new PropertyMetadata(string.Empty)
+        );
+
+    public string AlbumArtUrl
+    {
+        get => (string)GetValue(AlbumArtUrlProperty);
+        set => SetValue(AlbumArtUrlProperty, value);
+    }
 }

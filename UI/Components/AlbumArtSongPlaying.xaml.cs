@@ -18,10 +18,24 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace flow_desktop.UI.Components;
 
-public sealed partial class AlbumArtSP : UserControl
+public sealed partial class AlbumArtSongPlaying : UserControl
 {
-    public AlbumArtSP()
+    public AlbumArtSongPlaying()
     {
         InitializeComponent();
+    }
+
+    public static readonly DependencyProperty AlbumArtUrlProperty =
+        DependencyProperty.Register(
+            nameof(AlbumArtUrl),
+            typeof(string),
+            typeof(AlbumArtSongPlaying),
+            new PropertyMetadata(string.Empty)
+        );
+
+    public string AlbumArtUrl
+    {
+        get => (string)GetValue(AlbumArtUrlProperty);
+        set => SetValue(AlbumArtUrlProperty, value);
     }
 }
