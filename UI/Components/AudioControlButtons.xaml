@@ -27,7 +27,7 @@
         <components:PrevPlayPauseNextButtons
             Grid.Column="2"
             IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
-            OnPlay="HandlePlay"
+            OnPlayLoadedSong="HandlePlayLoadedSong"
             OnPause="HandlePause"
         />
         <components:SongRepeatButton

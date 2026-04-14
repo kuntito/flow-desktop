@@ -30,7 +30,7 @@
         <Border Width="{StaticResource LeftSpacing}" />
         <components:PlayPauseButton
             IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
-            OnPlay="HandlePlay"
+            OnPlayLoadedSong="HandlePlayLoadedSong"
             OnPause="HandlePause"
             />
         <Border Width="{StaticResource RightSpacing}" />

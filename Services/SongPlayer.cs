@@ -55,6 +55,18 @@ namespace flow_desktop.Services
 
         }
 
+        public void PlayLoadedSong()
+        {
+            if (PlayerState.LoadedSong != null)
+            {
+                _mediaPlayer.Play();
+                UpdatePlayerState(
+                    ps => ps.IsPlaying = true    
+                );
+                _positionTimer.Start();
+            }
+        }
+
         public void Pause()
         {
             _mediaPlayer.Pause();

@@ -41,7 +41,7 @@
             <components:AudioControlSection
                 IsPlaying="{x:Bind ViewModel.IsPlaying, Mode=OneWay, FallbackValue=False}"
                 PlayProgress="{x:Bind ViewModel.PlayProgress, Mode=OneWay, FallbackValue=0.0}"
-                OnPlay="OnPlay"
+                OnPlayLoadedSong="OnPlayLoadedSong"
                 OnPause="OnPause"
                 />
         </Border>

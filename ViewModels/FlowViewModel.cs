@@ -55,6 +55,11 @@ namespace flow_desktop.ViewModels
             _songPlayer.Play(song);
         }
 
+        public void PlayLoadedSong()
+        {
+            _songPlayer.PlayLoadedSong();
+        }
+
         public void PauseSong()
         {
             _songPlayer.Pause();

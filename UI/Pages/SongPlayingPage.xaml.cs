@@ -40,9 +40,9 @@ public sealed partial class SongPlayingPage : Page
         ViewModel = (FlowViewModel)e.Parameter;
     }
 
-    private void OnPlay(object sender, EventArgs e)
+    private void OnPlayLoadedSong(object sender, EventArgs e)
     {
-
+        ViewModel?.PlayLoadedSong();
     }
 
     private void OnPause(object sender, EventArgs e)

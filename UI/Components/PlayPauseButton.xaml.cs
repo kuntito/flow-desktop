@@ -76,7 +76,7 @@ namespace flow_desktop.UI.Components
                 : new BitmapImage(new Uri("ms-appx:///Assets/ic_play.png"));
         }
 
-        public event EventHandler? OnPlay;
+        public event EventHandler? OnPlayLoadedSong;
         public event EventHandler? OnPause;
         private void OnClick(
             object sender,
@@ -90,7 +90,7 @@ namespace flow_desktop.UI.Components
 
             else
             {
-                OnPlay?.Invoke(this, EventArgs.Empty);
+                OnPlayLoadedSong?.Invoke(this, EventArgs.Empty);
             }
         }
     }

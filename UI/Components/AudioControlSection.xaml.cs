@@ -53,12 +53,12 @@ public sealed partial class AudioControlSection : UserControl
         set => SetValue(PlayProgressProperty, value);
     }
 
-    public event EventHandler? OnPlay;
+    public event EventHandler? OnPlayLoadedSong;
     public event EventHandler? OnPause;
 
-    private void HandlePlay(object sender, EventArgs e)
+    private void HandlePlayLoadedSong(object sender, EventArgs e)
     {
-        OnPlay?.Invoke(this, EventArgs.Empty);
+        OnPlayLoadedSong?.Invoke(this, EventArgs.Empty);
     }
 
     private void HandlePause(object sender, EventArgs e)
