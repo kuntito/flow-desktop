@@ -5,9 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using flow_desktop.Models;
-using flow_desktop.Services;
-using flow_desktop.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -24,22 +21,10 @@ namespace flow_desktop.UI.Pages;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class IdleFlowPage : Page
+public sealed partial class LoadingPage : Page
 {
-    public IdleFlowPage()
+    public LoadingPage()
     {
         InitializeComponent();
-    }
-
-    public FlowViewModel? ViewModel { get; set; }
-
-    protected override void OnNavigatedTo(NavigationEventArgs e)
-    {
-        ViewModel = (FlowViewModel)e.Parameter;
-    }
-
-    private void OnStartFlow(object sender, EventArgs e)
-    {
-        _ = ViewModel?.StartFlow();
     }
 }

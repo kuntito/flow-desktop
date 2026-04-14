@@ -19,4 +19,11 @@ namespace flow_desktop.Models
         public List<SongSearchItem>? SearchResults { get; set; }
         public Dictionary<string, string>? Debug { get; set; }
     }
+
+    public class GetSongByIdResponse
+    {
+        public bool Success { get; set; }
+        public SongWithUrl? SongWithUrl { get; set; }
+        public Dictionary<string, string>? Debug { get; set; }
+    }
 }

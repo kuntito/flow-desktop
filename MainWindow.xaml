@@ -6,14 +6,36 @@
     xmlns:local="using:flow_desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
     mc:Ignorable="d"
     Title="flow-desktop">
 
-    <Window.SystemBackdrop>
-        <MicaBackdrop />
-    </Window.SystemBackdrop>
+    <Grid
+        Background="{StaticResource BrushKDB}"
+        BorderBrush="Yellow"
+        BorderThickness="1"
+    >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-    <Grid>
+        <components:AppTitleBar 
+            Grid.Row="0"
+            />
+
+        <Frame x:Name="RootFrame" 
+               Grid.Row="1"
+               />
+
+        <components:AppInfoBar 
+            x:Name="ErrorSnackBar"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            />
+
 
     </Grid>
+
 </Window>

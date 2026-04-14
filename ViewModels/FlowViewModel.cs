@@ -14,6 +14,7 @@ namespace flow_desktop.ViewModels
     public class FlowViewModel: INotifyPropertyChanged
     {
         private readonly SongPlayer _songPlayer;
+        private readonly FlowApiDataSource _flowDS;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -32,6 +33,7 @@ namespace flow_desktop.ViewModels
         public FlowViewModel()
         {
             _songPlayer = new SongPlayer();
+            _flowDS = new FlowApiDataSource();
 
             _songPlayer.OnStateChanged += (sender, ps) =>
             {
@@ -67,5 +69,52 @@ namespace flow_desktop.ViewModels
                 new PropertyChangedEventArgs(name)
             );
         }
+
+        private FlowPlaybackState _flowState = FlowPlaybackState.Idle;
+        public FlowPlaybackState FlowState => _flowState;
+
+        public event EventHandler<FlowPlaybackState>? OnFlowStateChanged;
+
+        public async Task StartFlow()
+        {
+            UpdateFlowState(FlowPlaybackState.Loading);
+
+            Song? nextSong = await FetchNextSong();
+            if (nextSong != null)
+            {
+                PlaySong(nextSong);
+                UpdateFlowState(FlowPlaybackState.Playing);
+            }
+        }
+
+        private async Task<Song?> FetchNextSong()
+        {
+            GetNextSongResponse? response = await _flowDS.SafeFetchNextSong();
+            SongWithUrl? songWithUrl = response?.SongWithUrl;
+
+            if (songWithUrl == null)
+            {
+                UpdateFlowState(FlowPlaybackState.Error);
+                return null;
+            }
+
+            Song nextSong = songWithUrl.ToSong();
+            return nextSong;
+        }
+
+        private void UpdateFlowState(FlowPlaybackState newFlowState)
+        {
+            _flowState = newFlowState;
+            OnFlowStateChanged?.Invoke(this, _flowState);
+        }
     }
+}
+
+
+public enum FlowPlaybackState
+{
+    Idle,
+    Loading,
+    Playing,
+    Error
 }

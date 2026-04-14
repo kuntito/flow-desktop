@@ -55,9 +55,10 @@ public sealed partial class TapToStartPrompt : UserControl
         };
     }
 
+    public event EventHandler? OnTapToStart;
 
     private void OnClick(object sender, TappedRoutedEventArgs e)
     {
-
+        OnTapToStart?.Invoke(this, EventArgs.Empty);
     }
 }
