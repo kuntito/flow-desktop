@@ -20,8 +20,7 @@ namespace flow_desktop.Services
         {
             _client = new HttpClient
             {
-                // TODO replace with stable base url
-                BaseAddress = new Uri("https://efe3-102-88-54-74.ngrok-free.app")
+                BaseAddress = new Uri("https://flow-api-o6gg.onrender.com")
             };
         }
 
