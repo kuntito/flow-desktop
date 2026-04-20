@@ -49,4 +49,9 @@ public sealed partial class SongPlayingPage : Page
     {
         ViewModel?.PauseSong();
     }
+
+    private void OnSeekTo(object sender, float progress)
+    {
+        ViewModel?.SeekTo(progress);
+    }
 }

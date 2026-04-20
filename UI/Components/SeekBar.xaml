@@ -14,7 +14,7 @@
             Maximum="1"
             StepFrequency="0.01"
             IsTabStop="False"
-            Value="{x:Bind PlayProgress, Mode=OneWay}"
+            ValueChanged="HandleSeekTo"
             Width="{x:Bind SeekBarWidth, Mode=OneWay}"
             >
         <Slider.Resources>

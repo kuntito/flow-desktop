@@ -14,6 +14,7 @@
         <components:SeekBar 
             SeekBarWidth="{StaticResource AudioControlSectionWidth}"
             PlayProgress="{x:Bind PlayProgress, Mode=OneWay}"
+            OnSeekTo="HandleSeekTo"
             />
         <Border Width="32" />
         <components:AudioControlButtons 

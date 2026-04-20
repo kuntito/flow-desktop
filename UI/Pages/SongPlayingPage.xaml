@@ -43,6 +43,7 @@
                 PlayProgress="{x:Bind ViewModel.PlayProgress, Mode=OneWay, FallbackValue=0.0}"
                 OnPlayLoadedSong="OnPlayLoadedSong"
                 OnPause="OnPause"
+                OnSeekTo="OnSeekTo"
                 />
         </Border>
 

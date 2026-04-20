@@ -35,7 +35,7 @@ namespace flow_desktop.ViewModels
             _songPlayer = new SongPlayer();
             _flowDS = new FlowApiDataSource();
 
-            _songPlayer.OnStateChanged += (sender, ps) =>
+            _songPlayer.OnPlayerStateChanged += (sender, ps) =>
             {
                 if (ps == null) return;
                 
@@ -43,14 +43,29 @@ namespace flow_desktop.ViewModels
                 OnPropertyChanged(nameof(LoadedSong));
                 OnPropertyChanged(nameof(SongTitle));
                 OnPropertyChanged(nameof(ArtistStr));
+                OnPropertyChanged(nameof(AlbumArtUrl));
 
                 OnPropertyChanged(nameof(IsPlaying));
-
                 OnPropertyChanged(nameof(PlayProgress));
             };
+
+            _songPlayer.OnPlaybackComplete += async (sender, e) =>
+            {
+                await HandleNextSongPlay();
+            };
+        }
+        
+        private void OnPropertyChanged(
+            [CallerMemberName] string? name = null
+        )
+        {
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(name)
+            );
         }
 
-        public void PlaySong(Song song)
+        private void PlaySong(Song song)
         {
             _songPlayer.Play(song);
         }
@@ -65,16 +80,11 @@ namespace flow_desktop.ViewModels
             _songPlayer.Pause();
         }
 
-        private void OnPropertyChanged(
-            [CallerMemberName] string? name = null
-        )
+        public void SeekTo(float progress)
         {
-            PropertyChanged?.Invoke(
-                this,
-                new PropertyChangedEventArgs(name)
-            );
+            _songPlayer.SeekTo(progress);
         }
-
+        
         private FlowPlaybackState _flowState = FlowPlaybackState.Idle;
         public FlowPlaybackState FlowState => _flowState;
 
@@ -111,6 +121,29 @@ namespace flow_desktop.ViewModels
         {
             _flowState = newFlowState;
             OnFlowStateChanged?.Invoke(this, _flowState);
+        }
+
+        private bool _isFetchingNextSong = false;
+        private async Task HandleNextSongPlay()
+        {
+            if (_isFetchingNextSong) return;
+            _isFetchingNextSong = true;
+
+            try
+            {
+                // without this, if fetch is slow, the ongoing song keeps playing till next song loads
+                // ideally, i want it to stop the moment fetching starts
+                PauseSong();
+                Song? nextSong = await FetchNextSong();
+                if (nextSong != null)
+                {
+                    PlaySong(nextSong);
+                }
+            }
+            finally
+            {
+                _isFetchingNextSong = false;
+            }
         }
     }
 }

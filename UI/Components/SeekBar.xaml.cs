@@ -22,6 +22,9 @@ namespace flow_desktop.UI.Components;
 public sealed partial class SeekBar : UserControl
 {
     private FrameworkElement? _sliderThumb;
+    private bool _isDragging = false;
+    private float _seekPosition = 0f;
+    
     public SeekBar()
     {
         InitializeComponent();
@@ -37,6 +40,26 @@ public sealed partial class SeekBar : UserControl
         PointerEntered += (s, e) => AnimateThumbOpacity(1);
 
         PointerExited += (s, e) => AnimateThumbOpacity(0);
+
+        SeekBarSlider.AddHandler(
+            UIElement.PointerPressedEvent,
+            new PointerEventHandler((s, e) => _isDragging = true),
+            true
+        );
+        
+        // only seek when user stops dragging slider knob
+        SeekBarSlider.AddHandler(
+            UIElement.PointerReleasedEvent,
+            new PointerEventHandler((s, e) =>
+            {
+                if (_isDragging)
+                {
+                    _isDragging = false;
+                    OnSeekTo?.Invoke(this, _seekPosition);
+                }
+            }),
+            true
+        );
     }
 
     /// <summary>
@@ -113,12 +136,31 @@ public sealed partial class SeekBar : UserControl
             nameof(PlayProgress),
             typeof(float),
             typeof(SeekBar),
-            new PropertyMetadata(0.0f)
+            new PropertyMetadata(0.0f, OnPlayProgressChanged)
         );
+
+    private static void OnPlayProgressChanged(
+        DependencyObject d,
+        DependencyPropertyChangedEventArgs e
+    )
+    {
+        var seekBar = (SeekBar)d;
+        if (!seekBar._isDragging)
+        {
+            seekBar.SeekBarSlider.Value = (float)e.NewValue;
+        }
+    }
 
     public float PlayProgress
     {
         get => (float)GetValue(PlayProgressProperty);
         set => SetValue(PlayProgressProperty, value);
+    }
+    
+    public event EventHandler<float>? OnSeekTo;
+
+    private void HandleSeekTo(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        _seekPosition = (float)e.NewValue;
     }
 }
