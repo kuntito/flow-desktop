@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -7,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using flow_desktop.Models;
 using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Threading;
 
 namespace flow_desktop.Services
 {
@@ -30,12 +33,20 @@ namespace flow_desktop.Services
                 "api/flow/next-song"
             );
         }
-
-        public async Task<SearchSongResponse?> SearchSong(string query)
+        
+        public async Task<SearchSongResponse?> SearchSong(
+            string query,
+            // cancelToken, is used client side to cancel a request on demand.
+            CancellationToken cancelToken
+        )
         {
-            return await _client.GetFromJsonAsync<SearchSongResponse>(
-                $"api/flow/search?q={query}"
+            var url = $"api/flow/search?q={query}";
+            var response = await _client.GetFromJsonAsync<SearchSongResponse>(
+                url,
+                cancelToken
             );
+            
+            return response;
         }
 
         public async Task<GetSongByIdResponse?> GetSongById(int songId)

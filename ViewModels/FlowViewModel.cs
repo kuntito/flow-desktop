@@ -8,15 +8,28 @@ using System.Threading.Tasks;
 using flow_desktop.Models;
 using flow_desktop.Services;
 using System.Runtime.CompilerServices;
+using flow_desktop.Helpers;
 
 namespace flow_desktop.ViewModels
 {
     public class FlowViewModel: INotifyPropertyChanged
     {
+        private SongSearchManager SongSearchManager { get; }
+        
         private readonly SongPlayer _songPlayer;
         private readonly FlowApiDataSource _flowDS;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(
+            [CallerMemberName] string? name = null
+        )
+        {
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(name)
+            );
+        }
+
 
         private PlayerState _playerState = new();
 
@@ -30,11 +43,28 @@ namespace flow_desktop.ViewModels
         private const string PlaceholderArtUrl = "https://sounds-xyz.s3.eu-north-1.amazonaws.com/albumArt/artworkUnknown.png";
         public string AlbumArtUrl => _playerState.LoadedSong?.AlbumArtUrl ?? PlaceholderArtUrl;
 
+        public SongSearchState SongSearchState => SongSearchManager.SongSearchState;
+
+        public Action<string> SearchForSong => async (query) =>
+        {
+            await SongSearchManager.SearchForSong(query);
+        };
+        
+        
         public FlowViewModel()
         {
-            _songPlayer = new SongPlayer();
             _flowDS = new FlowApiDataSource();
-
+            SongSearchManager = new SongSearchManager(_flowDS);
+            SongSearchManager.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SongSearchManager.SongSearchState))
+                {
+                    OnPropertyChanged(nameof(SongSearchState));
+                }
+            };
+            
+ 
+            _songPlayer = new SongPlayer();
             _songPlayer.OnPlayerStateChanged += (sender, ps) =>
             {
                 if (ps == null) return;
@@ -55,15 +85,6 @@ namespace flow_desktop.ViewModels
             };
         }
         
-        private void OnPropertyChanged(
-            [CallerMemberName] string? name = null
-        )
-        {
-            PropertyChanged?.Invoke(
-                this,
-                new PropertyChangedEventArgs(name)
-            );
-        }
 
         private void PlaySong(Song song)
         {

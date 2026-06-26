@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using flow_desktop.Models;
 
@@ -32,11 +33,14 @@ namespace flow_desktop.Services
             );
         }
 
-        public async Task<SearchSongResponse?> SafeSearchSong(string query)
+        public async Task<SearchSongResponse?> SafeSearchSong(
+            string query,
+            CancellationToken cancelToken
+        )
         {
             return await SafeApiCall(
                 "searchSong returns songs that match the given query",
-                () => _flowApi.SearchSong(query)
+                () => _flowApi.SearchSong(query, cancelToken)
             );
         }
 

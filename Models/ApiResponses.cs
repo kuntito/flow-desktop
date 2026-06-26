@@ -16,7 +16,8 @@ namespace flow_desktop.Models
     public class SearchSongResponse
     {
         public bool Success { get; set; }
-        public List<SongSearchItem>? SearchResults { get; set; }
+        public int ItemCount { get; set; }
+        public List<SongSearchItem>? searchResults { get; set; }
         public Dictionary<string, string>? Debug { get; set; }
     }
 

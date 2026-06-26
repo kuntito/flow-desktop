@@ -22,6 +22,8 @@
 
         <components:AppTitleBar 
             Grid.Row="0"
+            SongSearchState="{x:Bind FlowViewModel.SongSearchState, Mode=OneWay}"
+            OnSearch="{x:Bind FlowViewModel.SearchForSong}"
             />
 
         <Frame x:Name="RootFrame" 

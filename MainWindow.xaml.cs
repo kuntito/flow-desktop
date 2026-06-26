@@ -29,7 +29,7 @@ namespace flow_desktop
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        public FlowViewModel ViewModel { get; } = new();
+        public FlowViewModel FlowViewModel { get; } = new();
 
         public MainWindow()
         {
@@ -40,10 +40,10 @@ namespace flow_desktop
 
             RootFrame.Navigate(
                 typeof(IdleFlowPage),
-                ViewModel
+                FlowViewModel
             );
 
-            ViewModel.OnFlowStateChanged += (s, flowState) =>
+            FlowViewModel.OnFlowStateChanged += (s, flowState) =>
             {
 
                 switch (flowState)
@@ -56,14 +56,14 @@ namespace flow_desktop
                     case FlowPlaybackState.Playing:
                         RootFrame.Navigate(
                             typeof(SongPlayingPage),
-                            ViewModel
+                            FlowViewModel
                         );
                         break;
                     case FlowPlaybackState.Error:
                         ErrorSnackBar.FlashInfo("couldn't start flow");
                         RootFrame.Navigate(
                             typeof(IdleFlowPage),
-                            ViewModel
+                            FlowViewModel
                         );
                         break;
                 }

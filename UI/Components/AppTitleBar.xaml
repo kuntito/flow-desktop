@@ -23,7 +23,11 @@
                Height="18"
                Source="/Assets/flow_logo.png"/>
 
-        <components:SearchBar Grid.Column="1"/>
+        <components:SearchBar 
+            Grid.Column="1"
+            dependencyWrapperSongSearchState="{x:Bind SongSearchState, Mode=OneWay }"
+            OnSearch="{x:Bind OnSearch}"
+        />
 
         <Border Grid.Column="2"
                 Width="48"

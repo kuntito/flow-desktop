@@ -16,9 +16,18 @@
         <!-- search bar height (40) + gap (16) -->
         <x:Double x:Key="VerticalOffsetSearchResultsPopup">56</x:Double>
         <x:Double x:Key="SearchResultsPopupHeight">304</x:Double>
+        
+        <DataTemplate x:Key="SongSearchSLITemplate" x:DataType="models:SongSearchItem">
+            <components:SongSearchSLI
+                SongTitle="{x:Bind Title}"
+                ArtistStr="{x:Bind ArtistStr}"
+                />
+        </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid
+        HorizontalAlignment="Center"
+    >
         <Border CornerRadius="20"
                 Background="{StaticResource ColorAguero}"
                 Padding="16,0,10,0"
@@ -44,6 +53,7 @@
                     Background="Transparent"
                     BorderThickness="0"
                     FontSize="18"
+                    TextChanged="OnQueryChange"
                 >
                     <TextBox.Resources>
                         <!-- to make text box transparent in all states -->
@@ -78,28 +88,14 @@
                     Height="{StaticResource SearchResultsPopupHeight}"
                     Padding="8,16,8,0"
                     >
-                <!-- adds 16 px padding to the last list item -->
-                <ListView x:Name="SongSearchResultsListView"
-                          Padding="0,0,0,8"
-                    >
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Margin" Value="8,0,0,8"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Song">
-                            <components:SongSearchSLI 
-                                SongTitle="{x:Bind Title}"
-                                ArtistStr="{x:Bind ArtistStr}"/>
-                        </DataTemplate>
-                        
-                    </ListView.ItemTemplate>
-                    
-                </ListView>
+                <ContentControl 
+                    x:Name="SongSearchPopupContent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                />
             </Border>
-            
         </Popup>
     </Grid>
     
