@@ -16,6 +16,7 @@ namespace flow_desktop.UI.Screens;
 /// </summary>
 public sealed partial class HomeScreen : Page
 {
+    // TODO start here, change ui on active playlist, then how to stop playlist
     public HomeScreen()
     {
         InitializeComponent();

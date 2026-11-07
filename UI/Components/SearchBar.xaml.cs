@@ -23,7 +23,7 @@ using ABI.Microsoft.UI;
 // TODO add debounce to search
 namespace flow_desktop.UI.Components
 {
-    // TODO start here, add play next, play later
+    // TODO add play next, play later
     //  add local listen count db
     public sealed partial class SearchBar : UserControl
     {
