@@ -13,15 +13,22 @@
           Padding="24,0"
           >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Column="0"
-               Width="48"
-               Height="18"
-               Source="/Assets/flow_logo.png"/>
+        <!-- left row, items order left to right -->
+        <StackPanel Grid.Column="0"
+            Orientation="Horizontal"
+            Spacing="16"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+        >
+            <Image Width="48"
+                   Height="18"
+                   Source="/Assets/flow_logo.png"/>
+        </StackPanel>
 
         <components:SearchBar 
             Grid.Column="1"
@@ -29,9 +36,27 @@
             OnSearch="{x:Bind OnSearch}"
         />
 
-        <Border Grid.Column="2"
-                Width="48"
-                Height="18"/>
+        <!-- right row, items order right to left -->
+        <StackPanel Grid.Column="2"
+            Orientation="Horizontal"
+            Spacing="16"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            FlowDirection="RightToLeft"
+        >
+            <Button Width="40"
+                Height="40"
+                Padding="0"
+                Background="Transparent"
+                BorderThickness="0"
+                FlowDirection="LeftToRight"
+                Click="GoToPlaylists"
+            >
+                <Image Source="ms-appx:///Assets/ic_list.png"
+                       Width="24"
+                       Height="24"/>
+            </Button>
+        </StackPanel>
 
     </Grid>
 </UserControl>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="flow_desktop.UI.Screens.HomeScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
+    mc:Ignorable="d"
+    NavigationCacheMode="Required">
+
+    <Grid
+        Background="{StaticResource BrushKDB}"
+    >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <components:AppTitleBar 
+            x:Name="TitleBar"
+            Grid.Row="0"
+            SongSearchState="{x:Bind ViewModel.SongSearchState, Mode=OneWay}"
+            OnSearch="{x:Bind ViewModel.SearchForSong}"
+        />
+
+        <Frame x:Name="FlowFrame" 
+               Grid.Row="1"
+        />
+
+        <components:AppInfoBar 
+            x:Name="ErrorSnackBar"
+            Grid.Row="1"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+        />
+
+    </Grid>
+</Page>

@@ -27,6 +27,20 @@ public sealed partial class AppTitleBar : UserControl, INotifyPropertyChanged
         set => SetValue(dependencyPropOnSearch, value);
     }
     
+    private static readonly DependencyProperty dependencyPropOnGoToPlaylists =
+        DependencyProperty.Register(
+            nameof(OnGoToPlaylists),
+            typeof(Action),
+            typeof(AppTitleBar),
+            new PropertyMetadata(null)
+        );
+
+    public Action OnGoToPlaylists
+    {
+        get => (Action)GetValue(dependencyPropOnGoToPlaylists);
+        set => SetValue(dependencyPropOnGoToPlaylists, value);
+    }
+    
     private static readonly DependencyProperty dependencyPropSongSearchState =
         DependencyProperty.Register(
             nameof(SongSearchState),
@@ -46,6 +60,11 @@ public sealed partial class AppTitleBar : UserControl, INotifyPropertyChanged
     {
         var titleBar = (AppTitleBar)d;
         titleBar.PropertyChanged?.Invoke(titleBar, new PropertyChangedEventArgs(nameof(SongSearchState)));
+    }
+    
+    private void GoToPlaylists(object sender, RoutedEventArgs e)
+    {
+        OnGoToPlaylists?.Invoke();
     }
     
     public AppTitleBar()

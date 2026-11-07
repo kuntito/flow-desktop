@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="flow_desktop.UI.Screens.PlaylistsScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
+    mc:Ignorable="d">
+    <!-- TODO start here, deep the playlist screen looks how it should, header with back button icon then content -->
+    <Grid
+        Background="{StaticResource BrushKDB}"
+    >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- top bar, same height and padding as the home title bar -->
+        <components:TopBarPlaylistsScreen 
+            x:Name="TopBar"
+            Grid.Row="0"
+        />
+
+        <TextBlock Grid.Row="1"
+                   Text="playlists go here"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+    </Grid>
+</Page>
