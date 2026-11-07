@@ -51,6 +51,16 @@ namespace flow_desktop.Services
                 () => _flowApi.GetSongById(songId)
             );
         }
+        
+        public async Task<SyncPlaylistsResponse?> SafeSyncPlaylists(
+            List<PlaylistItem> playlists
+        )
+        {
+            return await SafeApiCall(
+                "syncs playlists, an can return all API playlists",
+                () => _flowApi.SyncPlaylists(playlists)
+            );
+        }
 
 
         /// <summary>

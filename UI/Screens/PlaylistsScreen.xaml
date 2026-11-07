@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:models="using:flow_desktop.Models"
     mc:Ignorable="d">
-    <!-- TODO start here, deep the playlist screen looks how it should, header with back button icon then content -->
     <Grid
         Background="{StaticResource BrushKDB}"
     >
@@ -22,9 +22,31 @@
             Grid.Row="0"
         />
 
+        <ListView Grid.Row="1"
+                  Padding="16,0"
+                  ItemsSource="{x:Bind ViewModel.Playlists, Mode=OneWay}"
+                  DoubleTapped="OnPlaylistDoubleTapped"
+        >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Margin" Value="8,0,0,8"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:PlaylistItem">
+                    <components:LiPlaylist
+                        PlaylistName="{x:Bind Name}"
+                    />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
         <TextBlock Grid.Row="1"
-                   Text="playlists go here"
+                   Text="playlists not available"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+                   VerticalAlignment="Center"
+                   Visibility="{x:Bind ViewModel.IsPlaylistsUnavailable, Mode=OneWay}"/>
     </Grid>
 </Page>

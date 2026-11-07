@@ -2,6 +2,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using System.Diagnostics;
+using flow_desktop.Models;
+using Microsoft.UI.Xaml.Input;
 
 namespace flow_desktop.UI.Screens;
 
@@ -28,5 +31,18 @@ public sealed partial class PlaylistsScreen : Page
         {
             Frame.GoBack();
         };
+    }
+    
+    private void OnPlaylistDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        var tappedElement = e.OriginalSource as FrameworkElement;
+        var playlist = tappedElement?.DataContext as PlaylistItem;
+
+        if (playlist == null) return;
+
+        // TODO start the playlist through the view model.
+        Debug.WriteLine($"start playlist: {playlist.Name}");
+
+        Frame.GoBack();
     }
 }

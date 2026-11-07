@@ -44,6 +44,10 @@ namespace flow_desktop.ViewModels
         public string AlbumArtUrl => _playerState.LoadedSong?.AlbumArtUrl ?? PlaceholderArtUrl;
 
         public SongSearchState SongSearchState => SongSearchManager.SongSearchState;
+        
+        private List<PlaylistItem> _playlists = new();
+        public List<PlaylistItem> Playlists => _playlists;
+        public bool IsPlaylistsUnavailable => _playlists.Count == 0;
 
         public Action<string> SearchForSong => async (query) =>
         {
@@ -83,6 +87,9 @@ namespace flow_desktop.ViewModels
             {
                 await HandleNextSongPlay();
             };
+            
+            // underscore keeps IDE quiet, behavior stays the same without it
+            _ = LoadPlaylists();
         }
         
 
@@ -142,6 +149,27 @@ namespace flow_desktop.ViewModels
         {
             _flowState = newFlowState;
             OnFlowStateChanged?.Invoke(this, _flowState);
+        }
+        
+        /// <summary>
+        /// fetches every playlist the API has.
+        /// </summary>
+        private async Task LoadPlaylists()
+        {
+            var emptyPlaylists = new List<PlaylistItem>();
+
+            // sync typically replaces api's playlist with the list you send it
+            // but if you send an empty list, it returns every playlist it has.
+            var response = await _flowDS.SafeSyncPlaylists(emptyPlaylists);
+
+            var playlists = response?.Playlists ?? emptyPlaylists;
+
+            _playlists = playlists
+                .OrderByDescending(playlist => playlist.PlaylistId)
+                .ToList();
+
+            OnPropertyChanged(nameof(Playlists));
+            OnPropertyChanged(nameof(IsPlaylistsUnavailable));
         }
 
         private bool _isFetchingNextSong = false;
