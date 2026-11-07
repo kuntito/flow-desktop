@@ -27,4 +27,19 @@ namespace flow_desktop.Models
         public SongWithUrl? SongWithUrl { get; set; }
         public Dictionary<string, string>? Debug { get; set; }
     }
+    
+    public class SyncPlaylistsResponse
+    {
+        public bool Success { get; set; }
+        public int? PlaylistCount { get; set; }
+        public List<PlaylistItem>? Playlists { get; set; }
+        public Dictionary<string, string>? Debug { get; set; }
+    }
+    
+    public class GetPlaylistNextSongResponse
+    {
+        public bool Success { get; set; }
+        public SongWithUrl? SongWithUrl { get; set; }
+        public Dictionary<string, string>? Debug { get; set; }
+    }
 }

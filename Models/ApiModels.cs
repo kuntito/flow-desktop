@@ -33,4 +33,11 @@ namespace flow_desktop.Models
         public string ArtistStr { get; set; } = string.Empty;
         public string AlbumArtUrl { get; set; } = string.Empty;
     }
+    
+    public class PlaylistItem
+    {
+        public int PlaylistId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public List<int> SongIds { get; set; } = new();
+    }
 }
