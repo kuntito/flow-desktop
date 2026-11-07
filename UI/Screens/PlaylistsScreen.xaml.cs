@@ -40,8 +40,7 @@ public sealed partial class PlaylistsScreen : Page
 
         if (playlist == null) return;
 
-        // TODO start the playlist through the view model.
-        Debug.WriteLine($"start playlist: {playlist.Name}");
+        _ = ViewModel?.StartPlaylist(playlist);
 
         Frame.GoBack();
     }

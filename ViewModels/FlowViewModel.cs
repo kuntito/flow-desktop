@@ -48,6 +48,9 @@ namespace flow_desktop.ViewModels
         private List<PlaylistItem> _playlists = new();
         public List<PlaylistItem> Playlists => _playlists;
         public bool IsPlaylistsUnavailable => _playlists.Count == 0;
+        
+        private static readonly TimeSpan PlaylistDuration = TimeSpan.FromMinutes(90);
+        private ActivePlaylist? _activePlaylist = null;
 
         public Action<string> SearchForSong => async (query) =>
         {
@@ -129,11 +132,66 @@ namespace flow_desktop.ViewModels
                 UpdateFlowState(FlowPlaybackState.Playing);
             }
         }
+        
+        public async Task StartPlaylist(PlaylistItem playlist)
+        {
+            // so the current song goes quiet while the playlist song loads.
+            PauseSong();
+
+            var endsAt = DateTime.Now + PlaylistDuration;
+
+            _activePlaylist = new ActivePlaylist(
+                PlaylistId: playlist.PlaylistId,
+                EndsAt: endsAt
+            );
+
+            await StartFlow();
+        }
+        
+        /// <summary>
+        /// the active playlist's id, or null if none is running.
+        ///
+        /// a playlist past its end time is cleared here,
+        /// so it also returns null.
+        ///
+        /// TODO the name says get, but it also clears an ended playlist.
+        ///  fine while only FetchNextSong calls it.
+        ///  if anything else needs the active playlist, say the UI,
+        ///  split it into a plain read and the clearing.
+        /// </summary>
+        private int? GetActivePlaylistId()
+        {
+            if (_activePlaylist == null) return null;
+
+            var hasEnded = DateTime.Now >= _activePlaylist.EndsAt;
+            if (hasEnded)
+            {
+                _activePlaylist = null;
+                return null;
+            }
+
+            return _activePlaylist.PlaylistId;
+        }
+        
 
         private async Task<Song?> FetchNextSong()
         {
-            GetNextSongResponse? response = await _flowDS.SafeFetchNextSong();
-            SongWithUrl? songWithUrl = response?.SongWithUrl;
+            int? activePlaylistId = GetActivePlaylistId();
+
+            SongWithUrl? songWithUrl;
+            
+            if (activePlaylistId == null)
+            {
+                GetNextSongResponse? response = await _flowDS.SafeFetchNextSong();
+                songWithUrl = response?.SongWithUrl;
+            }
+            else
+            {
+                GetPlaylistNextSongResponse? response = await _flowDS.SafeGetPlaylistNextSong(
+                    activePlaylistId.Value
+                );
+                songWithUrl = response?.SongWithUrl;
+            }
 
             if (songWithUrl == null)
             {

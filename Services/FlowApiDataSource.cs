@@ -61,6 +61,16 @@ namespace flow_desktop.Services
                 () => _flowApi.SyncPlaylists(playlists)
             );
         }
+        
+        public async Task<GetPlaylistNextSongResponse?> SafeGetPlaylistNextSong(
+            int playlistId
+        )
+        {
+            return await SafeApiCall(
+                "gets the playlist's least recently played song",
+                () => _flowApi.GetPlaylistNextSong(playlistId)
+            );
+        }
 
 
         /// <summary>
