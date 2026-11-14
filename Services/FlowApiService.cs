@@ -70,7 +70,7 @@ namespace flow_desktop.Services
         /// 
         /// the API takes these updated copies as truth,
         /// and replaces its own version with said copies.
-        ///forge
+        ///
         /// however, call this endpoint without any playlists,
         /// and it returns all the playlists the API has.
         ///
