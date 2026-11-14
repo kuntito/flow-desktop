@@ -13,13 +13,23 @@
         >
         <TextBlock 
             Text="{x:Bind SongTitle, Mode=OneWay}"
-            FontSize="24"
+            FontSize="20"
+            FontWeight="SemiBold"
             HorizontalAlignment="Center"
-            />
+            MaxWidth="400"
+            MaxLines="1"
+            TextTrimming="CharacterEllipsis"
+        />
+        <Border Height="8"/>
         <TextBlock 
             Text="{x:Bind ArtistStr, Mode=OneWay}"
             FontSize="16"
+            Foreground="{StaticResource BrushTelli}"
+            Opacity="0.7"
             HorizontalAlignment="Center"
-            />
+            MaxWidth="400"
+            MaxLines="1"
+            TextTrimming="CharacterEllipsis"
+        />
     </StackPanel>
 </UserControl>

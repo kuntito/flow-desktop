@@ -9,13 +9,21 @@
     mc:Ignorable="d">
 
     <StackPanel VerticalAlignment="Center"
-                >
+    >
         <TextBlock 
             Text="{x:Bind SongTitle, Mode=OneWay}"
-            FontSize="16"/>
+            FontSize="16"
+            FontWeight="SemiBold"
+            MaxLines="1"
+            TextTrimming="CharacterEllipsis"/>
+        <Border Height="8"/>
         <TextBlock 
             Text="{x:Bind ArtistStr, Mode=OneWay}"
-            FontSize="12" />
+            FontSize="12"
+            Foreground="{StaticResource BrushTelli}"
+            Opacity="0.7"
+            MaxLines="1"
+            TextTrimming="CharacterEllipsis"/>
         <Border Height="2"/>
     </StackPanel>
 </UserControl>
