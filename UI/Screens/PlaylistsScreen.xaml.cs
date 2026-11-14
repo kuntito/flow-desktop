@@ -41,7 +41,5 @@ public sealed partial class PlaylistsScreen : Page
         if (playlist == null) return;
 
         _ = ViewModel?.StartPlaylist(playlist);
-
-        Frame.GoBack();
     }
 }
