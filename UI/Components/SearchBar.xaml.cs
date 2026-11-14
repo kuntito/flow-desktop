@@ -94,7 +94,8 @@ namespace flow_desktop.UI.Components
                 case SongSearchState.Searching:
                     SongSearchPopupContent.Content = new ProgressRing
                     {
-                        IsActive = true
+                        IsActive = true,
+                        Foreground = (Brush)Application.Current.Resources["BrushIsco"],
                     };
                     break;
                 case SongSearchState.NoResults:
