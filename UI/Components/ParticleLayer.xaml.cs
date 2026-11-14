@@ -65,7 +65,7 @@ public sealed partial class ParticleLayer : UserControl
 
         for (var i = 0; i < ParticleCount; i++)
         {
-            var radius = _random.NextSingle() * 2f + 1f;
+            var radius = _random.NextSingle() * 1.5f + 0.75f;
             var color = particleColors[_random.Next(particleColors.Count)];
 
             var dot = new Ellipse
