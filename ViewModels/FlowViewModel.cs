@@ -47,7 +47,12 @@ namespace flow_desktop.ViewModels
         
         private List<PlaylistItem> _playlists = new();
         public List<PlaylistItem> Playlists => _playlists;
-        public bool IsPlaylistsUnavailable => _playlists.Count == 0;
+        
+        private bool _isLoadingPlaylists = false;
+        public bool IsLoadingPlaylists => _isLoadingPlaylists;
+        
+        // while loading, the list is about to change, so don't claim it's empty yet.
+        public bool IsPlaylistsUnavailable => !_isLoadingPlaylists && _playlists.Count == 0;
         
         private static readonly TimeSpan PlaylistDuration = TimeSpan.FromMinutes(90);
         private ActivePlaylist? _activePlaylist = null;
@@ -212,22 +217,36 @@ namespace flow_desktop.ViewModels
         /// <summary>
         /// fetches every playlist the API has.
         /// </summary>
-        private async Task LoadPlaylists()
+        public async Task LoadPlaylists()
         {
-            var emptyPlaylists = new List<PlaylistItem>();
-
-            // sync typically replaces api's playlist with the list you send it
-            // but if you send an empty list, it returns every playlist it has.
-            var response = await _flowDS.SafeSyncPlaylists(emptyPlaylists);
-
-            var playlists = response?.Playlists ?? emptyPlaylists;
-
-            _playlists = playlists
-                .OrderByDescending(playlist => playlist.PlaylistId)
-                .ToList();
-
-            OnPropertyChanged(nameof(Playlists));
+            _isLoadingPlaylists = true;
+            OnPropertyChanged(nameof(IsLoadingPlaylists));
             OnPropertyChanged(nameof(IsPlaylistsUnavailable));
+
+            try
+            {
+                var emptyPlaylists = new List<PlaylistItem>();
+
+                // sync typically replaces api's playlist with the list you send it
+                // but if you send an empty list, it returns every playlist it has.
+                var response = await _flowDS.SafeSyncPlaylists(emptyPlaylists);
+
+                var playlists = response?.Playlists ?? emptyPlaylists;
+
+                _playlists = playlists
+                    .OrderByDescending(playlist => playlist.PlaylistId)
+                    .ToList();
+
+            
+                OnPropertyChanged(nameof(Playlists));
+
+            }
+            finally
+            {
+                _isLoadingPlaylists = false;
+                OnPropertyChanged(nameof(IsLoadingPlaylists));
+                OnPropertyChanged(nameof(IsPlaylistsUnavailable));
+            }
         }
 
         private bool _isFetchingNextSong = false;

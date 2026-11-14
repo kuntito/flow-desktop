@@ -17,13 +17,15 @@
                Width="24"
                Height="24"
                VerticalAlignment="Center"/>
-
+        
         <TextBlock Text="{x:Bind PlaylistName, Mode=OneWay}"
                    FontSize="18"
                    TextTrimming="CharacterEllipsis"
+                   TextAlignment="Center"
                    VerticalAlignment="Center"
                    Width="220"
         />
+        
         <!-- balances the icon's weight, so the name sits centered -->
         <Border Width="24"
                 Height="24"

@@ -50,6 +50,18 @@
                     VerticalAlignment="Center"
                     FlowDirection="RightToLeft"
         >
+            <Button Width="40"
+                    Height="40"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    FlowDirection="LeftToRight"
+                    Click="OnRefreshClick"
+            >
+                <Image Source="ms-appx:///Assets/ic_refresh.png"
+                       Width="24"
+                       Height="24"/>
+            </Button>
         </StackPanel>
 
     </Grid>

@@ -24,6 +24,26 @@ public sealed partial class TopBarPlaylistsScreen : UserControl
     {
         NavBack?.Invoke();
     }
+    
+    
+    private static readonly DependencyProperty dependencyPropRefresh =
+        DependencyProperty.Register(
+            nameof(Refresh),
+            typeof(Action),
+            typeof(TopBarPlaylistsScreen),
+            new PropertyMetadata(null)
+        );
+
+    public Action Refresh
+    {
+        get => (Action)GetValue(dependencyPropRefresh);
+        set => SetValue(dependencyPropRefresh, value);
+    }
+
+    private void OnRefreshClick(object sender, RoutedEventArgs e)
+    {
+        Refresh?.Invoke();
+    }
 
 
     public TopBarPlaylistsScreen()

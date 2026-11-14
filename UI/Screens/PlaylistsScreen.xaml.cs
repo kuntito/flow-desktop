@@ -22,7 +22,13 @@ public sealed partial class PlaylistsScreen : Page
     }
 
     public FlowViewModel? ViewModel { get; set; }
-
+    
+    private Visibility VisibleWhenFalse(bool value)
+    {
+        return value
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+    }
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
         ViewModel = (FlowViewModel)e.Parameter;
@@ -30,6 +36,11 @@ public sealed partial class PlaylistsScreen : Page
         TopBar.NavBack = () =>
         {
             Frame.GoBack();
+        };
+        
+        TopBar.Refresh = () =>
+        {
+            _ = ViewModel?.LoadPlaylists();
         };
     }
     

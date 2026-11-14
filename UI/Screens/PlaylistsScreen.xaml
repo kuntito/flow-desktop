@@ -25,6 +25,7 @@
         <ListView Grid.Row="1"
                   Padding="16,0"
                   ItemsSource="{x:Bind ViewModel.Playlists, Mode=OneWay}"
+                  Visibility="{x:Bind VisibleWhenFalse(ViewModel.IsLoadingPlaylists), Mode=OneWay}"
                   DoubleTapped="OnPlaylistDoubleTapped"
         >
             <ListView.ItemContainerStyle>
@@ -49,5 +50,11 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Visibility="{x:Bind ViewModel.IsPlaylistsUnavailable, Mode=OneWay}"/>
+        
+        <ProgressRing Grid.Row="1"
+                      IsActive="{x:Bind ViewModel.IsLoadingPlaylists, Mode=OneWay}"
+                      Foreground="{StaticResource BrushIsco}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
     </Grid>
 </Page>
