@@ -9,16 +9,28 @@
     xmlns:components="using:flow_desktop.UI.Components"
     mc:Ignorable="d">
 
-    <StackPanel
+    <Grid
         VerticalAlignment="Center"
+    >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- shrinks the art to fit the space left, never grows past 400 -->
+        <Viewbox Grid.Row="0"
+                 StretchDirection="DownOnly"
         >
-        <components:AlbumArtSongPlaying 
-            AlbumArtUrl="{x:Bind AlbumArtUrl, Mode=OneWay}"
+            <components:AlbumArtSongPlaying 
+                AlbumArtUrl="{x:Bind AlbumArtUrl, Mode=OneWay}"
             />
-        <Border Height="16" />
+        </Viewbox>
+
         <components:SongTitleAndArtistSP
+            Grid.Row="2"
             SongTitle="{x:Bind SongTitle, Mode=OneWay}"
             ArtistStr="{x:Bind ArtistStr, Mode=OneWay}"
-            />
-    </StackPanel>
+        />
+    </Grid>
 </UserControl>
