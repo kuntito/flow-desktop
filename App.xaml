@@ -21,6 +21,16 @@
             <Color x:Key="ColorIsco">#4D4D4D</Color>
             <Color x:Key="ColorRaze">#68B439</Color>
             <Color x:Key="ColorDebit">#FD5273</Color>
+            
+            <FontFamily x:Key="AppFont">ms-appx:///Assets/Fonts/ReadexPro.ttf#Readex Pro</FontFamily>
+
+            <!-- buttons, text boxes and most controls read this key -->
+            <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/ReadexPro.ttf#Readex Pro</FontFamily>
+
+            <!-- plain TextBlocks don't, so give them a default style -->
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+            </Style>
 
             <!-- brushes -->
             <SolidColorBrush x:Key="BrushKDB" Color="{StaticResource ColorKDB}"/>
