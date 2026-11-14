@@ -232,9 +232,14 @@ namespace flow_desktop.ViewModels
                 var response = await _flowDS.SafeSyncPlaylists(emptyPlaylists);
 
                 var playlists = response?.Playlists ?? emptyPlaylists;
+                
+                // auto playlists first, then regular ones,
+                // each group in the order the API sent them.
+                var autoPlaylists = playlists.Where(playlist => playlist.IsAuto);
+                var regularPlaylists = playlists.Where(playlist => !playlist.IsAuto);
 
-                _playlists = playlists
-                    .OrderByDescending(playlist => playlist.PlaylistId)
+                _playlists = autoPlaylists
+                    .Concat(regularPlaylists)
                     .ToList();
 
             
