@@ -16,7 +16,7 @@
             FontWeight="SemiBold"
             MaxLines="1"
             TextTrimming="CharacterEllipsis"/>
-        <Border Height="8"/>
+        <Border Height="2"/>
         <TextBlock 
             Text="{x:Bind ArtistStr, Mode=OneWay}"
             FontSize="12"
