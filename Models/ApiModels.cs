@@ -39,5 +39,6 @@ namespace flow_desktop.Models
         public int PlaylistId { get; set; }
         public string Name { get; set; } = string.Empty;
         public List<int> SongIds { get; set; } = new();
+        public bool IsAuto { get; set; }
     }
 }

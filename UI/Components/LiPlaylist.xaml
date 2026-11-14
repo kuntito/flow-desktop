@@ -11,8 +11,9 @@
                 Spacing="16"
                 Height="48"
                 VerticalAlignment="Center"
+                HorizontalAlignment="Center"
     >
-        <Image Source="ms-appx:///Assets/ic_wavy.png"
+        <Image Source="{x:Bind IconFor(IsAuto), Mode=OneWay}"
                Width="24"
                Height="24"
                VerticalAlignment="Center"/>
@@ -20,6 +21,12 @@
         <TextBlock Text="{x:Bind PlaylistName, Mode=OneWay}"
                    FontSize="18"
                    TextTrimming="CharacterEllipsis"
-                   VerticalAlignment="Center"/>
+                   VerticalAlignment="Center"
+                   Width="220"
+        />
+        <!-- balances the icon's weight, so the name sits centered -->
+        <Border Width="24"
+                Height="24"
+        />
     </StackPanel>
 </UserControl>

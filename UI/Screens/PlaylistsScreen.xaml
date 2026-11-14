@@ -38,6 +38,7 @@
                 <DataTemplate x:DataType="models:PlaylistItem">
                     <components:LiPlaylist
                         PlaylistName="{x:Bind Name}"
+                        IsAuto="{x:Bind IsAuto}"
                     />
                 </DataTemplate>
             </ListView.ItemTemplate>
