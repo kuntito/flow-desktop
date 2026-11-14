@@ -6,9 +6,14 @@
     xmlns:local="using:flow_desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
     mc:Ignorable="d"
     Title="flow-desktop">
 
-    <Frame x:Name="ScreenFrame"/>
+    <Grid>
+        <Frame x:Name="ScreenFrame"/>
+
+        <components:ParticleLayer/>
+    </Grid>
 
 </Window>
