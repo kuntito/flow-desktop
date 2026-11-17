@@ -23,6 +23,9 @@
             SongSearchState="{x:Bind ViewModel.SongSearchState, Mode=OneWay}"
             OnSearch="{x:Bind ViewModel.SearchForSong}"
             OnPlaySong="{x:Bind ViewModel.PlaySearchedSong}"
+            IsPlaylistActive="{x:Bind ViewModel.IsPlaylistActive, Mode=OneWay}"
+            ActivePlaylistName="{x:Bind ViewModel.ActivePlaylistName, Mode=OneWay}"
+            IsActivePlaylistAuto="{x:Bind ViewModel.IsActivePlaylistAuto, Mode=OneWay}"
         />
 
         <Frame x:Name="FlowFrame" 

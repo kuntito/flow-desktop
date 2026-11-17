@@ -45,7 +45,56 @@ public sealed partial class LiPlaylist : UserControl
 
         return new BitmapImage(new Uri(iconPath));
     }
+    
+    public static readonly DependencyProperty PlaylistIdProperty =
+        DependencyProperty.Register(
+            nameof(PlaylistId),
+            typeof(int),
+            typeof(LiPlaylist),
+            new PropertyMetadata(0)
+        );
 
+    public int PlaylistId
+    {
+        get => (int)GetValue(PlaylistIdProperty);
+        set => SetValue(PlaylistIdProperty, value);
+    }
+
+    public static readonly DependencyProperty ActivePlaylistIdProperty =
+        DependencyProperty.Register(
+            nameof(ActivePlaylistId),
+            typeof(object),
+            typeof(LiPlaylist),
+            new PropertyMetadata(null)
+        );
+    
+    // no playlist id is ever below 1, so -1 indicates a missing playlist.
+    private const int InvalidPlaylistId = -1;
+    public int ActivePlaylistId
+    {
+        get => GetValue(ActivePlaylistIdProperty) as int? ?? InvalidPlaylistId;
+        set => SetValue(ActivePlaylistIdProperty, value);
+    }
+
+    private Visibility IconVisibility(int playlistId, int activePlaylistId)
+    {
+        var isActive = playlistId == activePlaylistId;
+
+        return isActive
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+    }
+
+    private Visibility BarsVisibility(int playlistId, int activePlaylistId)
+    {
+        var isActive = playlistId == activePlaylistId;
+
+        return isActive
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+    }
+    
+    
     public LiPlaylist()
     {
         InitializeComponent();

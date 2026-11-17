@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:flow_desktop.UI.Components"
     mc:Ignorable="d">
 
     <StackPanel Orientation="Horizontal"
@@ -13,10 +14,21 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
     >
-        <Image Source="{x:Bind IconFor(IsAuto), Mode=OneWay}"
-               Width="24"
-               Height="24"
-               VerticalAlignment="Center"/>
+        <Grid Width="24"
+              Height="24"
+              VerticalAlignment="Center">
+            
+            <Image Source="{x:Bind IconFor(IsAuto), Mode=OneWay}"
+                   Width="24"
+                   Height="24"
+                   Visibility="{x:Bind IconVisibility(PlaylistId, ActivePlaylistId), Mode=OneWay}"
+            />
+            <components:AppSoundBars
+                BarBrush="{StaticResource BrushTelli}"
+                HorizontalAlignment="Center"
+                Visibility="{x:Bind BarsVisibility(PlaylistId, ActivePlaylistId), Mode=OneWay}"
+            />
+        </Grid>
         
         <TextBlock Text="{x:Bind PlaylistName, Mode=OneWay}"
                    FontSize="18"

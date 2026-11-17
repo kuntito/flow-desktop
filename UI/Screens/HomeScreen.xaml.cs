@@ -45,6 +45,11 @@ public sealed partial class HomeScreen : Page
                 ViewModel
             );
         };
+        
+        TitleBar.OnEndPlaylist = () =>
+        {
+            ViewModel.EndPlaylist();
+        };
 
         ViewModel.OnFlowStateChanged += (s, flowState) =>
         {

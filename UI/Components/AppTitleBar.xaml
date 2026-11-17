@@ -7,11 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:components="using:flow_desktop.UI.Components"
     mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <Storyboard x:Name="PlaylistNameBlink"
+                    RepeatBehavior="Forever">
+            <DoubleAnimation
+                Storyboard.TargetName="ActivePlaylistButton"
+                Storyboard.TargetProperty="Opacity"
+                From="0.85" To="0.2"
+                Duration="0:0:0.7"
+                AutoReverse="True"/>
+        </Storyboard>
+    </UserControl.Resources>
 
 
     <Grid Height="64"
           Padding="24,0"
-          >
+    >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -27,7 +39,31 @@
         >
             <Image Width="48"
                    Height="18"
-                   Source="/Assets/flow_logo.png"/>
+                   Source="/Assets/flow_logo.png"
+                   Visibility="{x:Bind VisibleWhenFalse(IsPlaylistActive), Mode=OneWay}"
+            />
+            
+            <Border x:Name="ActivePlaylistButton"
+                    Background="Transparent"
+                    Tapped="DeactivatePlaylist"
+                    PointerEntered="ShowHandCursor"
+                    PointerExited="ShowDefaultCursor"
+                    Visibility="{x:Bind IsPlaylistActive, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <Image Source="{x:Bind IconFor(IsActivePlaylistAuto), Mode=OneWay}"
+                           Width="24"
+                           Height="24"
+                           VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind ActivePlaylistName, Mode=OneWay}"
+                               FontSize="18"
+                               MaxWidth="200"
+                               MaxLines="1"
+                               TextTrimming="CharacterEllipsis"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource BrushTelli}"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
 
         <components:SearchBar 

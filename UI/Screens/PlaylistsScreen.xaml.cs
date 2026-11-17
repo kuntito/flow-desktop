@@ -53,4 +53,47 @@ public sealed partial class PlaylistsScreen : Page
 
         _ = ViewModel?.StartPlaylist(playlist);
     }
+    
+    private bool IsActivePlaylist(PlaylistItem playlist)
+    {
+        return playlist.PlaylistId == ViewModel?.ActivePlaylistId;
+    }
+
+
+    private void OnPlaylistMenuOpening(object sender, object e)
+    {
+        var menu = (MenuFlyout)sender;
+        var activateItem = (MenuFlyoutItem)menu.Items[0];
+        var deactivateItem = (MenuFlyoutItem)menu.Items[1];
+        
+        var playlist = activateItem.Tag as PlaylistItem;
+        if (playlist == null) return;
+
+        var isActive = IsActivePlaylist(playlist);
+
+        activateItem.Visibility = isActive
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+        deactivateItem.Visibility = isActive
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+    }
+    
+    
+    private void OnActivatePlaylistClick(object sender, RoutedEventArgs e)
+    {
+        var menuItem = sender as FrameworkElement;
+        var playlist = menuItem?.Tag as PlaylistItem;
+
+        if (playlist == null) return;
+
+        ViewModel?.ActivatePlaylist(playlist);
+    }
+    
+
+    private void OnDeactivatePlaylistClick(object sender, RoutedEventArgs e)
+    {
+        ViewModel?.EndPlaylist();
+    }
 }

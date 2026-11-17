@@ -56,6 +56,11 @@ namespace flow_desktop.ViewModels
         
         private static readonly TimeSpan PlaylistDuration = TimeSpan.FromMinutes(90);
         private ActivePlaylist? _activePlaylist = null;
+        public bool IsPlaylistActive => _activePlaylist != null;
+        public int? ActivePlaylistId => _activePlaylist?.PlaylistId;
+        public string ActivePlaylistName => _activePlaylist?.PlaylistName ?? "";
+        public bool IsActivePlaylistAuto => _activePlaylist?.IsAuto ?? false;
+        
 
         public Action<string> SearchForSong => async (query) =>
         {
@@ -143,19 +148,54 @@ namespace flow_desktop.ViewModels
             }
         }
         
+        private void NotifyActivePlaylistChanged()
+        {
+            OnPropertyChanged(nameof(IsPlaylistActive));
+            OnPropertyChanged(nameof(ActivePlaylistId));
+            OnPropertyChanged(nameof(ActivePlaylistName));
+            OnPropertyChanged(nameof(IsActivePlaylistAuto));
+        }
+
+        /// <summary>
+        /// makes the playlist the source of the next songs,
+        /// for the next `PlaylistDuration`.
+        ///
+        /// doesn't touch playback. the current song finishes,
+        /// and the one after comes from the playlist.
+        /// </summary>
+        public void ActivatePlaylist(PlaylistItem playlist)
+        {
+            var endsAt = DateTime.Now + PlaylistDuration;
+
+            _activePlaylist = new ActivePlaylist(
+                PlaylistId: playlist.PlaylistId,
+                PlaylistName: playlist.Name,
+                IsAuto: playlist.IsAuto,
+                EndsAt: endsAt
+            );
+            
+            NotifyActivePlaylistChanged();
+        }
+        
         public async Task StartPlaylist(PlaylistItem playlist)
         {
             // so the current song goes quiet while the playlist song loads.
             PauseSong();
 
-            var endsAt = DateTime.Now + PlaylistDuration;
-
-            _activePlaylist = new ActivePlaylist(
-                PlaylistId: playlist.PlaylistId,
-                EndsAt: endsAt
-            );
+            ActivatePlaylist(playlist);
 
             await StartFlow();
+        }
+        
+        /// <summary>
+        /// turns the playlist off.
+        /// the next song comes from the normal flow.
+        /// </summary>
+        public void EndPlaylist()
+        {
+            _activePlaylist = null;
+
+            NotifyActivePlaylistChanged();
         }
         
         private async Task PlaySongById(int songId)
@@ -204,7 +244,7 @@ namespace flow_desktop.ViewModels
             var hasEnded = DateTime.Now >= _activePlaylist.EndsAt;
             if (hasEnded)
             {
-                _activePlaylist = null;
+                EndPlaylist();
                 return null;
             }
 
