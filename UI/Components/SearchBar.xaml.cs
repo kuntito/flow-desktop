@@ -41,6 +41,20 @@ namespace flow_desktop.UI.Components
             set => SetValue(dependencyPropOnSearch, value);
         }
 
+        private static readonly DependencyProperty dependencyPropOnPlaySong =
+            DependencyProperty.Register(
+                nameof(OnPlaySong),
+                typeof(Action<SongSearchItem>),
+                typeof(SearchBar),
+                new PropertyMetadata(null)
+            );
+
+        public Action<SongSearchItem> OnPlaySong
+        {
+            get => (Action<SongSearchItem>)GetValue(dependencyPropOnPlaySong);
+            set => SetValue(dependencyPropOnPlaySong, value);
+        }
+
         private DispatcherTimer? _debounceTimer;
         private void OnQueryChange(object sender, TextChangedEventArgs e)
         {
@@ -140,8 +154,26 @@ namespace flow_desktop.UI.Components
             itemStyle.Setters.Add(new Setter(MarginProperty, new Thickness(8, 0, 0, 8)));
             itemStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Stretch));
             listView.ItemContainerStyle = itemStyle;
+            
+            listView.DoubleTapped += OnSongDoubleTapped;
 
             return listView;
+        }
+        
+        /// <summary>
+        /// double-tapping a result plays it, and closes the results.
+        /// </summary>
+        private void OnSongDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            var tappedElement = e.OriginalSource as FrameworkElement;
+            var song = tappedElement?.DataContext as SongSearchItem;
+
+            if (song == null) return;
+
+            SongSearchResultsPopup.IsOpen = false;
+            SearchTextBox.Text = "";
+
+            OnPlaySong?.Invoke(song);
         }
             
             

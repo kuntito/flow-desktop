@@ -49,6 +49,7 @@
                        Grid.Column="0"/>
 
                 <TextBox 
+                    x:Name="SearchTextBox"
                     Grid.Column="1"
                     Background="Transparent"
                     BorderThickness="0"

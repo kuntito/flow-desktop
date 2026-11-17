@@ -62,6 +62,11 @@ namespace flow_desktop.ViewModels
             await SongSearchManager.SearchForSong(query);
         };
         
+        public Action<SongSearchItem> PlaySearchedSong => async (song) =>
+        {
+            await PlaySongById(song.Id);
+        };
+        
         
         public FlowViewModel()
         {
@@ -151,6 +156,34 @@ namespace flow_desktop.ViewModels
             );
 
             await StartFlow();
+        }
+        
+        private async Task PlaySongById(int songId)
+        {
+            // so the current song goes quiet while this one loads.
+            PauseSong();
+
+            GetSongByIdResponse? response = await _flowDS.SafeGetSongById(songId);
+            SongWithUrl? songWithUrl = response?.SongWithUrl;
+
+            if (songWithUrl == null)
+            {
+                UpdateFlowState(FlowPlaybackState.Error);
+                return;
+            }
+
+            Song song = songWithUrl.ToSong();
+            PlaySong(song);
+
+            // the song playing page is reached by navigating home's frame on Playing.
+            // setting Playing while already on it would navigate again,
+            // building a new song playing page and pushing the current one onto the frame's history.
+            // the page already updates through its bindings, so skip it.
+            var isAlreadyPlaying = _flowState == FlowPlaybackState.Playing;
+            if (!isAlreadyPlaying)
+            {
+                UpdateFlowState(FlowPlaybackState.Playing);
+            }
         }
         
         /// <summary>

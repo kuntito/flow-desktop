@@ -34,6 +34,7 @@
             Grid.Column="1"
             dependencyWrapperSongSearchState="{x:Bind SongSearchState, Mode=OneWay }"
             OnSearch="{x:Bind OnSearch}"
+            OnPlaySong="{x:Bind OnPlaySong}"
         />
 
         <!-- right row, items order right to left -->

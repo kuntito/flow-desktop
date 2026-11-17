@@ -22,6 +22,7 @@
             Grid.Row="0"
             SongSearchState="{x:Bind ViewModel.SongSearchState, Mode=OneWay}"
             OnSearch="{x:Bind ViewModel.SearchForSong}"
+            OnPlaySong="{x:Bind ViewModel.PlaySearchedSong}"
         />
 
         <Frame x:Name="FlowFrame" 
