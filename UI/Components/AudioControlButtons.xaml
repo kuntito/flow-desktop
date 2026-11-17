@@ -29,6 +29,7 @@
             IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
             OnPlayLoadedSong="HandlePlayLoadedSong"
             OnPause="HandlePause"
+            OnNext="HandleNext"
         />
         <components:SongRepeatButton
             Size="{StaticResource AudioControlIconRippleSize}"

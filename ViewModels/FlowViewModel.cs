@@ -175,6 +175,11 @@ namespace flow_desktop.ViewModels
             PlayLoadedSong();
         }
         
+        public async Task PlayNextSong()
+        {
+            await HandleNextSongPlay();
+        }
+        
         private FlowPlaybackState _flowState = FlowPlaybackState.Idle;
         public FlowPlaybackState FlowState => _flowState;
 

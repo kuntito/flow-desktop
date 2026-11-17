@@ -43,6 +43,7 @@ public sealed partial class PrevPlayPauseNextButtons : UserControl
 
     public event EventHandler? OnPlayLoadedSong;
     public event EventHandler? OnPause;
+    public event EventHandler? OnNext;
 
     private void HandlePlayLoadedSong(object sender, EventArgs e)
     {
@@ -52,5 +53,10 @@ public sealed partial class PrevPlayPauseNextButtons : UserControl
     private void HandlePause(object sender, EventArgs e)
     {
         OnPause?.Invoke(this, EventArgs.Empty);
+    }
+    
+    private void HandleNext(object sender, EventArgs e)
+    {
+        OnNext?.Invoke(this, EventArgs.Empty);
     }
 }

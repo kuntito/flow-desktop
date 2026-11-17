@@ -83,6 +83,7 @@ public sealed partial class AudioControlSection : UserControl
     public event EventHandler? OnPlayLoadedSong;
     public event EventHandler? OnPause;
     public event EventHandler<float>? OnSeekTo;
+    public event EventHandler? OnNext;
 
     private void HandlePlayLoadedSong(object sender, EventArgs e)
     {
@@ -97,5 +98,10 @@ public sealed partial class AudioControlSection : UserControl
     private void HandleSeekTo(object sender, float progress)
     {
         OnSeekTo?.Invoke(this, progress);
+    }
+    
+    private void HandleNext(object sender, EventArgs e)
+    {
+        OnNext?.Invoke(this, EventArgs.Empty);
     }
 }

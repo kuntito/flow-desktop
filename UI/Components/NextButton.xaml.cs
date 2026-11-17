@@ -23,6 +23,7 @@ namespace flow_desktop.UI.Components
     {
         public NextButton()
         {
+            
             InitializeComponent();
 
             PointerEntered += (s, e) =>
@@ -39,12 +40,15 @@ namespace flow_desktop.UI.Components
                 );
             };
         }
+        
+        public event EventHandler? OnNext;
+        
         private void OnClick(
             object sender,
             RoutedEventArgs e
         )
         {
-
+            OnNext?.Invoke(this, EventArgs.Empty);
         }
     }
 

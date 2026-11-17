@@ -27,7 +27,7 @@ public sealed partial class AudioControlButtons : UserControl
     
     public event EventHandler? OnToggleRepeat;
     public event EventHandler? OnResetRepeat;
-
+    
     public static readonly DependencyProperty RepeatCountProperty =
         DependencyProperty.Register(
             nameof(RepeatCount),
@@ -84,6 +84,8 @@ public sealed partial class AudioControlButtons : UserControl
 
     public event EventHandler? OnPlayLoadedSong;
     public event EventHandler? OnPause;
+    public event EventHandler? OnNext;
+    
 
     private void HandlePlayLoadedSong(object sender, EventArgs e)
     {
@@ -93,5 +95,10 @@ public sealed partial class AudioControlButtons : UserControl
     private void HandlePause(object sender, EventArgs e)
     {
         OnPause?.Invoke(this, EventArgs.Empty);
+    }
+    
+    private void HandleNext(object sender, EventArgs e)
+    {
+        OnNext?.Invoke(this, EventArgs.Empty);
     }
 }

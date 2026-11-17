@@ -25,6 +25,7 @@
             RepeatCount="{x:Bind RepeatCount, Mode=OneWay}"
             OnToggleRepeat="HandleToggleRepeat"
             OnResetRepeat="HandleResetRepeat"
+            OnNext="HandleNext"
             />
     </StackPanel>
 </UserControl>

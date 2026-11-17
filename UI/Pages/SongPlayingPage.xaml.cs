@@ -64,4 +64,9 @@ public sealed partial class SongPlayingPage : Page
     {
         ViewModel?.ResetRepeat();
     }
+    
+    private void OnNext(object sender, EventArgs e)
+    {
+        _ = ViewModel?.PlayNextSong();
+    }
 }
