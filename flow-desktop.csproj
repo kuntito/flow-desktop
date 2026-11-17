@@ -14,7 +14,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Assets\**" />
+    <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest"/>
   </ItemGroup>
 	
   <ItemGroup>
@@ -163,6 +163,8 @@
     <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
-    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
+    <WindowsPackageType Condition="'$(Configuration)' != 'Debug'">None</WindowsPackageType>
+    <WindowsAppSDKSelfContained Condition="'$(Configuration)' != 'Debug'">true</WindowsAppSDKSelfContained>
   </PropertyGroup>
 </Project>
