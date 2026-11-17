@@ -44,6 +44,9 @@
                 OnPlayLoadedSong="OnPlayLoadedSong"
                 OnPause="OnPause"
                 OnSeekTo="OnSeekTo"
+                RepeatCount="{x:Bind ViewModel.RepeatCount, Mode=OneWay, FallbackValue=0}"
+                OnToggleRepeat="OnToggleRepeat"
+                OnResetRepeat="OnResetRepeat"
                 />
         </Border>
 

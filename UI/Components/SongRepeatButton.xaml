@@ -11,6 +11,7 @@
     <Button
         Background="Transparent"
         Click="OnClick"
+        DoubleTapped="OnDoubleTapped"
         Padding="0"
         Width="{x:Bind Size, Mode=OneWay}"
         Height="{x:Bind Size, Mode=OneWay}"
@@ -18,7 +19,7 @@
         BorderThickness="0"
     >
         <Image
-            Source="/Assets/ic_repeat_off.png"
+            Source="{x:Bind IconFor(RepeatCount), Mode=OneWay}"
             Width="{StaticResource AudioControlIconSize}"
             Height="{StaticResource AudioControlIconSize}"
         />

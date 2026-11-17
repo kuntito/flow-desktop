@@ -17,7 +17,14 @@ namespace flow_desktop.ViewModels
         private SongSearchManager SongSearchManager { get; }
         
         private readonly SongPlayer _songPlayer;
+        
+        private readonly RepeatSongManager _repeatSongManager = new();
+        public int RepeatCount => _repeatSongManager.RepeatCount;
+        
+        private readonly NextSongManager _nextSongManager;
+        
         private readonly FlowApiDataSource _flowDS;
+        private readonly FlowRepository _flowRepo;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(
@@ -69,13 +76,34 @@ namespace flow_desktop.ViewModels
         
         public Action<SongSearchItem> PlaySearchedSong => async (song) =>
         {
-            await PlaySongById(song.Id);
+            await HandleNextSongPlay(song.Id);
         };
+        
+        public void ToggleRepeat()
+        {
+            _repeatSongManager.ToggleRepeat();
+            OnPropertyChanged(nameof(RepeatCount));
+        }
+        
+        public void ResetRepeat()
+        {
+            _repeatSongManager.Reset();
+            OnPropertyChanged(nameof(RepeatCount));
+        }
         
         
         public FlowViewModel()
         {
             _flowDS = new FlowApiDataSource();
+            _flowRepo = new FlowRepository(_flowDS);
+            
+            _nextSongManager = new NextSongManager(
+                fetchSpecificSong: _flowRepo.FetchSpecificSong,
+                fetchPlaylistSong: _flowRepo.FetchPlaylistSong,
+                fetchDefaultSong: _flowRepo.FetchDefaultSong,
+                getActivePlaylistId: GetActivePlaylistId
+            );
+            
             SongSearchManager = new SongSearchManager(_flowDS);
             SongSearchManager.PropertyChanged += (s, e) =>
             {
@@ -100,10 +128,20 @@ namespace flow_desktop.ViewModels
                 OnPropertyChanged(nameof(IsPlaying));
                 OnPropertyChanged(nameof(PlayProgress));
             };
-
+            
             _songPlayer.OnPlaybackComplete += async (sender, e) =>
             {
-                await HandleNextSongPlay();
+                var shouldRepeatSong = _repeatSongManager.ConsumeRepeatIfActive();
+                if (shouldRepeatSong)
+                {
+                    OnPropertyChanged(nameof(RepeatCount));
+                    PlayFromStart();
+                }
+                else
+                {
+                    await HandleNextSongPlay();
+                }
+                
             };
             
             // underscore keeps IDE quiet, behavior stays the same without it
@@ -131,6 +169,12 @@ namespace flow_desktop.ViewModels
             _songPlayer.SeekTo(progress);
         }
         
+        private void PlayFromStart()
+        {
+            SeekTo(0f);
+            PlayLoadedSong();
+        }
+        
         private FlowPlaybackState _flowState = FlowPlaybackState.Idle;
         public FlowPlaybackState FlowState => _flowState;
 
@@ -138,14 +182,7 @@ namespace flow_desktop.ViewModels
 
         public async Task StartFlow()
         {
-            UpdateFlowState(FlowPlaybackState.Loading);
-
-            Song? nextSong = await FetchNextSong();
-            if (nextSong != null)
-            {
-                PlaySong(nextSong);
-                UpdateFlowState(FlowPlaybackState.Playing);
-            }
+            await HandleNextSongPlay();
         }
         
         private void NotifyActivePlaylistChanged()
@@ -198,34 +235,6 @@ namespace flow_desktop.ViewModels
             NotifyActivePlaylistChanged();
         }
         
-        private async Task PlaySongById(int songId)
-        {
-            // so the current song goes quiet while this one loads.
-            PauseSong();
-
-            GetSongByIdResponse? response = await _flowDS.SafeGetSongById(songId);
-            SongWithUrl? songWithUrl = response?.SongWithUrl;
-
-            if (songWithUrl == null)
-            {
-                UpdateFlowState(FlowPlaybackState.Error);
-                return;
-            }
-
-            Song song = songWithUrl.ToSong();
-            PlaySong(song);
-
-            // the song playing page is reached by navigating home's frame on Playing.
-            // setting Playing while already on it would navigate again,
-            // building a new song playing page and pushing the current one onto the frame's history.
-            // the page already updates through its bindings, so skip it.
-            var isAlreadyPlaying = _flowState == FlowPlaybackState.Playing;
-            if (!isAlreadyPlaying)
-            {
-                UpdateFlowState(FlowPlaybackState.Playing);
-            }
-        }
-        
         /// <summary>
         /// the active playlist's id, or null if none is running.
         ///
@@ -233,7 +242,7 @@ namespace flow_desktop.ViewModels
         /// so it also returns null.
         ///
         /// TODO the name says get, but it also clears an ended playlist.
-        ///  fine while only FetchNextSong calls it.
+        ///  fine while only `NextSongManager` calls it.
         ///  if anything else needs the active playlist, say the UI,
         ///  split it into a plain read and the clearing.
         /// </summary>
@@ -251,35 +260,6 @@ namespace flow_desktop.ViewModels
             return _activePlaylist.PlaylistId;
         }
         
-
-        private async Task<Song?> FetchNextSong()
-        {
-            int? activePlaylistId = GetActivePlaylistId();
-
-            SongWithUrl? songWithUrl;
-            
-            if (activePlaylistId == null)
-            {
-                GetNextSongResponse? response = await _flowDS.SafeFetchNextSong();
-                songWithUrl = response?.SongWithUrl;
-            }
-            else
-            {
-                GetPlaylistNextSongResponse? response = await _flowDS.SafeGetPlaylistNextSong(
-                    activePlaylistId.Value
-                );
-                songWithUrl = response?.SongWithUrl;
-            }
-
-            if (songWithUrl == null)
-            {
-                UpdateFlowState(FlowPlaybackState.Error);
-                return null;
-            }
-
-            Song nextSong = songWithUrl.ToSong();
-            return nextSong;
-        }
 
         private void UpdateFlowState(FlowPlaybackState newFlowState)
         {
@@ -328,20 +308,39 @@ namespace flow_desktop.ViewModels
         }
 
         private bool _isFetchingNextSong = false;
-        private async Task HandleNextSongPlay()
+        private async Task HandleNextSongPlay(int? prioritySongId = null)
         {
             if (_isFetchingNextSong) return;
             _isFetchingNextSong = true;
 
             try
             {
-                // without this, if fetch is slow, the ongoing song keeps playing till next song loads
-                // ideally, i want it to stop the moment fetching starts
-                PauseSong();
-                Song? nextSong = await FetchNextSong();
-                if (nextSong != null)
+                _repeatSongManager.Reset();
+                OnPropertyChanged(nameof(RepeatCount));
+
+                var isStartingFlow = _flowState == FlowPlaybackState.Idle
+                                     || _flowState == FlowPlaybackState.Error;
+                if (isStartingFlow)
                 {
-                    PlaySong(nextSong);
+                    UpdateFlowState(FlowPlaybackState.Loading);
+                }
+
+                PauseSong();
+
+                Song? nextSong = await _nextSongManager.GetNextSong(prioritySongId);
+
+                if (nextSong == null)
+                {
+                    UpdateFlowState(FlowPlaybackState.Error);
+                    return;
+                }
+
+                PlaySong(nextSong);
+
+                var isAlreadyPlaying = _flowState == FlowPlaybackState.Playing;
+                if (!isAlreadyPlaying)
+                {
+                    UpdateFlowState(FlowPlaybackState.Playing);
                 }
             }
             finally

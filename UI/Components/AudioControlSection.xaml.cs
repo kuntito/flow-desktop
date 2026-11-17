@@ -25,6 +25,33 @@ public sealed partial class AudioControlSection : UserControl
         InitializeComponent();
     }
 
+    public event EventHandler? OnToggleRepeat;
+    public event EventHandler? OnResetRepeat;
+
+    public static readonly DependencyProperty RepeatCountProperty =
+        DependencyProperty.Register(
+            nameof(RepeatCount),
+            typeof(int),
+            typeof(AudioControlSection),
+            new PropertyMetadata(0)
+        );
+
+    public int RepeatCount
+    {
+        get => (int)GetValue(RepeatCountProperty);
+        set => SetValue(RepeatCountProperty, value);
+    }
+
+    private void HandleToggleRepeat(object sender, EventArgs e)
+    {
+        OnToggleRepeat?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void HandleResetRepeat(object sender, EventArgs e)
+    {
+        OnResetRepeat?.Invoke(this, EventArgs.Empty);
+    }
+    
     public static readonly DependencyProperty IsPlayingProperty =
         DependencyProperty.Register(
             nameof(IsPlaying),

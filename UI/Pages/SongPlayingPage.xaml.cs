@@ -54,4 +54,14 @@ public sealed partial class SongPlayingPage : Page
     {
         ViewModel?.SeekTo(progress);
     }
+    
+    private void OnToggleRepeat(object sender, EventArgs e)
+    {
+        ViewModel?.ToggleRepeat();
+    }
+    
+    private void OnResetRepeat(object sender, EventArgs e)
+    {
+        ViewModel?.ResetRepeat();
+    }
 }

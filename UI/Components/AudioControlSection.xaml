@@ -22,6 +22,9 @@
             IsPlaying="{x:Bind IsPlaying, Mode=OneWay}"
             OnPlayLoadedSong="HandlePlayLoadedSong"
             OnPause="HandlePause"
+            RepeatCount="{x:Bind RepeatCount, Mode=OneWay}"
+            OnToggleRepeat="HandleToggleRepeat"
+            OnResetRepeat="HandleResetRepeat"
             />
     </StackPanel>
 </UserControl>
