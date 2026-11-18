@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace flow_desktop.Models
@@ -40,6 +41,17 @@ namespace flow_desktop.Models
     {
         public bool Success { get; set; }
         public SongWithUrl? SongWithUrl { get; set; }
+        public Dictionary<string, string>? Debug { get; set; }
+    }
+    
+    public class GetCatalogueResponse
+    {
+        public bool Success { get; set; }
+        public int? ItemCount { get; set; }
+
+        [JsonPropertyName("cacheItems")]
+        public List<CatalogSong>? Songs { get; set; }
+
         public Dictionary<string, string>? Debug { get; set; }
     }
 }

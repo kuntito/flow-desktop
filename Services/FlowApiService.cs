@@ -107,6 +107,13 @@ namespace flow_desktop.Services
 
             return await response.Content.ReadFromJsonAsync<GetPlaylistNextSongResponse>();
         }
+        
+        public async Task<GetCatalogueResponse?> GetCatalogue()
+        {
+            return await _client.GetFromJsonAsync<GetCatalogueResponse>(
+                "api/flow/cache-song-search"
+            );
+        }
     }
 }
     

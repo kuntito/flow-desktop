@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using flow_desktop.Models;
 
 // TODO move other calls to repo
@@ -27,6 +28,13 @@ namespace flow_desktop.Services
             GetNextSongResponse? response = await flowDS.SafeFetchNextSong();
 
             return response?.SongWithUrl?.ToSong();
+        }
+        
+        public async Task<List<CatalogSong>?> GetCatalogue()
+        {
+            GetCatalogueResponse? response = await flowDS.SafeGetCatalogue();
+
+            return response?.Songs;
         }
     }
 }

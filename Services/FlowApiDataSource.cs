@@ -96,5 +96,13 @@ namespace flow_desktop.Services
                 return default;
             }
         }
+        
+        public async Task<GetCatalogueResponse?> SafeGetCatalogue()
+        {
+            return await SafeApiCall(
+                "returns the server's catalogue",
+                () => _flowApi.GetCatalogue()
+            );
+        }
     }
 }
