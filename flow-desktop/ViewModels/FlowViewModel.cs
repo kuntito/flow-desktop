@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using flow_desktop.Models;
 using flow_desktop.Services;
 using System.Runtime.CompilerServices;
+using flow_desktop.Data;
 using flow_desktop.Helpers;
 
 namespace flow_desktop.ViewModels
@@ -95,7 +96,10 @@ namespace flow_desktop.ViewModels
         public FlowViewModel()
         {
             _flowDS = new FlowApiDataSource();
-            _flowRepo = new FlowRepository(_flowDS);
+            _flowRepo = new FlowRepository(
+                flowDS: _flowDS,
+                localCatalogDao: new LocalCatalogDao()
+            );
             
             _nextSongManager = new NextSongManager(
                 fetchSpecificSong: _flowRepo.FetchSpecificSong,
@@ -148,6 +152,7 @@ namespace flow_desktop.ViewModels
             
             // underscore keeps IDE quiet, behavior stays the same without it
             _ = LoadPlaylists();
+            _ = _flowRepo.RefreshLocalCatalog();
         }
         
 
