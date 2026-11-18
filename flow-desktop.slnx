@@ -4,7 +4,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="flow-desktop.csproj">
+  <Project Path="flow-desktop.Data/flow-desktop.Data.csproj" />
+  <Project Path="flow-desktop/flow-desktop.csproj">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
     <Platform Solution="*|x86" Project="x86" />
