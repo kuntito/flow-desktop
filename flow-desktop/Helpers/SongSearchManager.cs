@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using flow_desktop.Models;
-using flow_desktop.Services;
 
 namespace flow_desktop.Helpers;
 
@@ -31,12 +32,12 @@ public class SongSearchManager: INotifyPropertyChanged
         );
     }
 
-    private readonly FlowApiDataSource _flowDS;
+    private readonly Func<string, CancellationToken, Task<List<SongSearchItem>?>> _searchSong;
     public SongSearchManager(
-        FlowApiDataSource flowDs
+        Func<string, CancellationToken, Task<List<SongSearchItem>?>> searchSong
     )
     {
-        _flowDS = flowDs;
+        _searchSong = searchSong;
     }
 
 
@@ -61,8 +62,7 @@ public class SongSearchManager: INotifyPropertyChanged
 
         SongSearchState = new SongSearchState.Searching();
 
-        var response = await _flowDS.SafeSearchSong(query, cancelToken);
-        var songSearchResults = response?.searchResults;
+        var songSearchResults = await _searchSong(query, cancelToken);
 
         if (songSearchResults == null)
         {

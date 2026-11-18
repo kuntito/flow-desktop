@@ -104,7 +104,9 @@ namespace flow_desktop.ViewModels
                 getActivePlaylistId: GetActivePlaylistId
             );
             
-            SongSearchManager = new SongSearchManager(_flowDS);
+            SongSearchManager = new SongSearchManager(
+                searchSong: _flowRepo.SearchSong
+            );
             SongSearchManager.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(SongSearchManager.SongSearchState))

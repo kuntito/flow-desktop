@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using flow_desktop.Models;
 
@@ -35,6 +36,16 @@ namespace flow_desktop.Services
             GetCatalogueResponse? response = await flowDS.SafeGetCatalogue();
 
             return response?.Songs;
+        }
+        
+        public async Task<List<SongSearchItem>?> SearchSong(
+            string query,
+            CancellationToken cancelToken
+        )
+        {
+            SearchSongResponse? response = await flowDS.SafeSearchSong(query, cancelToken);
+
+            return response?.searchResults;
         }
     }
 }
