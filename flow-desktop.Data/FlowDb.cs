@@ -1,0 +1,32 @@
+﻿using System;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
+
+namespace flow_desktop.Data
+{
+    public class FlowDb : DbContext
+    {
+        public DbSet<LocalCatalog> LocalCatalog => Set<LocalCatalog>();
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var localAppData = Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData
+            );
+
+            var flowFolder = Path.Combine(
+                localAppData,
+                "flow"
+            );
+
+            Directory.CreateDirectory(flowFolder);
+
+            var dbPath = Path.Combine(
+                flowFolder,
+                "flow.db"
+            );
+
+            options.UseSqlite($"Data Source={dbPath}");
+        }
+    }
+}

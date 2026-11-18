@@ -14,7 +14,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest"/>
+    <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 	
   <ItemGroup>
@@ -147,6 +147,9 @@
     <Page Update="UI\Pages\IdleFlowPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\flow-desktop.Data\flow-desktop.Data.csproj" />
   </ItemGroup>
 
   <!--
