@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <x:Double x:Key="LeftSpacing">16</x:Double>
+        <x:Double x:Key="LeftSpacing">10</x:Double>
 
         <!-- `rightSpacing` is less than `leftSpacing`.
         
@@ -20,7 +20,7 @@
         it gives the illusion
         that the right spacing is larger.
         -->
-        <x:Double x:Key="RightSpacing">12</x:Double>
+        <x:Double x:Key="RightSpacing">6</x:Double>
     </UserControl.Resources>
 
     <StackPanel
