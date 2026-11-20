@@ -96,7 +96,7 @@ namespace flow_desktop.Helpers
             return pickedItem.Song;
         }
 
-        public void RemoveAt(string key)
+        public void Remove(string key)
         {
             var updatedQueue = _queue
                 .Where(item => item.Key != key)

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:components="using:flow_desktop.UI.Components"
+    xmlns:models="using:flow_desktop.Models"
     mc:Ignorable="d">
     
     <UserControl.Resources>
@@ -66,12 +67,97 @@
             </Border>
         </StackPanel>
 
-        <components:SearchBar 
-            Grid.Column="1"
-            dependencyWrapperSongSearchState="{x:Bind SongSearchState, Mode=OneWay }"
-            OnSearch="{x:Bind OnSearch}"
-            OnPlaySong="{x:Bind OnPlaySong}"
-        />
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    Spacing="16"
+                    VerticalAlignment="Center"
+        >
+            <Border Width="40"
+                    Height="40"/>
+
+            <components:SearchBar 
+                dependencyWrapperSongSearchState="{x:Bind SongSearchState, Mode=OneWay }"
+                OnSearch="{x:Bind OnSearch}"
+                OnPlaySong="{x:Bind OnPlaySong}"
+                OnPlayNext="{x:Bind OnPlayNext}"
+                OnInclude="{x:Bind OnInclude}"
+            />
+
+            <Button
+                Width="40"
+                Height="40"
+                Padding="0"
+                Background="Transparent"
+                BorderThickness="0"
+                Opacity="{x:Bind OpacityFor(HasNextSong), Mode=OneWay}"
+                IsHitTestVisible="{x:Bind HasNextSong, Mode=OneWay}">
+                <Image
+                    Source="ms-appx:///Assets/ic_pnq.png"
+                    Width="24"
+                    Height="24"/>
+                <Button.Flyout>
+                    <Flyout x:Name="PnqFlyout" Placement="Bottom">
+                        <Flyout.FlyoutPresenterStyle>
+                            <Style TargetType="FlyoutPresenter">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="MaxWidth" Value="640"/>
+                            </Style>
+                        </Flyout.FlyoutPresenterStyle>
+                        <StackPanel Width="420" Spacing="4">
+                            <TextBlock
+                                Text="incoming"
+                                FontSize="10"
+                                Foreground="{StaticResource BrushTelli}"
+                                Opacity="0.5"
+                            />
+                            <Border
+                                Background="{StaticResource BrushAguero}"
+                                CornerRadius="16"
+                                Padding="16,8,16,16"
+                            >
+                                <StackPanel Spacing="8">
+                                    <Button
+                                        Width="28"
+                                        Height="28"
+                                        Padding="0"
+                                        CornerRadius="14"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Click="ClearPlayNextQueue">
+                                        <Image
+                                            Source="ms-appx:///Assets/ic_clear.png"
+                                            Width="14"
+                                            Height="14"/>
+                                    </Button>
+                                    <ListView
+                                        ItemsSource="{x:Bind PlayNextQueue, Mode=OneWay}"
+                                        MaxHeight="304">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                <Setter Property="Margin" Value="0,0,0,8"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate x:DataType="models:PnqItem">
+                                                <components:PlayNextQueueSLI
+                                                    SongTitle="{x:Bind Song.Title}"
+                                                    ArtistStr="{x:Bind Song.ArtistStr}"
+                                                    OnRemove="RemoveFromPnq"
+                                                    />
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+
 
         <!-- right row, items order right to left -->
         <StackPanel Grid.Column="2"

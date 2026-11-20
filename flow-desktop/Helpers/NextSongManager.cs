@@ -8,6 +8,7 @@ namespace flow_desktop.Helpers
     public enum NextSongSource
     {
         UserChoice,
+        Pnq,
         Playlist,
         ApiDefault,
     }
@@ -21,7 +22,9 @@ namespace flow_desktop.Helpers
         Func<int, Task<Song?>> fetchSpecificSong,
         Func<int, Task<Song?>> fetchPlaylistSong,
         Func<Task<Song?>> fetchDefaultSong,
-        Func<int?> getActivePlaylistId
+        Func<int?> getActivePlaylistId,
+        Func<bool> hasQueuedSong,
+        Func<SongSearchItem?> popNextInQueue
     )
     {
         public async Task<Song?> GetNextSong(int? prioritySongId = null)
@@ -39,6 +42,18 @@ namespace flow_desktop.Helpers
                     : new NextSongItem(
                         Song: pickedSong,
                         Source: NextSongSource.UserChoice
+                    );
+            }             
+            else if (hasQueuedSong())
+            {
+                SongSearchItem nextInQueue = popNextInQueue()!;
+                Song? pnqSong = await fetchSpecificSong(nextInQueue.Id);
+
+                nextSongItem = pnqSong == null
+                    ? null
+                    : new NextSongItem(
+                        Song: pnqSong,
+                        Source: NextSongSource.Pnq
                     );
             }
             else if (activePlaylistId != null)

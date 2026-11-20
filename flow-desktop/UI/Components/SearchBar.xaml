@@ -21,6 +21,8 @@
             <components:SongSearchSLI
                 SongTitle="{x:Bind Title}"
                 ArtistStr="{x:Bind ArtistStr}"
+                OnPlayNext="PlaySongNext"
+                OnInclude="IncludeSong"
                 />
         </DataTemplate>
     </UserControl.Resources>

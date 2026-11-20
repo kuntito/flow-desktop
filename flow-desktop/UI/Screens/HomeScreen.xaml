@@ -26,6 +26,10 @@
             IsPlaylistActive="{x:Bind ViewModel.IsPlaylistActive, Mode=OneWay}"
             ActivePlaylistName="{x:Bind ViewModel.ActivePlaylistName, Mode=OneWay}"
             IsActivePlaylistAuto="{x:Bind ViewModel.IsActivePlaylistAuto, Mode=OneWay}"
+            OnPlayNext="{x:Bind ViewModel.PlaySongNext}"
+            OnInclude="{x:Bind ViewModel.IncludeSong}"
+            HasNextSong="{x:Bind ViewModel.HasNextSong, Mode=OneWay}"
+            PlayNextQueue="{x:Bind ViewModel.PlayNextQueue, Mode=OneWay}"
         />
 
         <Frame x:Name="FlowFrame" 

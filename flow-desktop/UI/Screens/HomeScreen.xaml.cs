@@ -49,6 +49,9 @@ public sealed partial class HomeScreen : Page
         {
             ViewModel.EndPlaylist();
         };
+        
+        TitleBar.OnClearPlayNextQueue = () => ViewModel.ClearPlayNextQueue();
+        TitleBar.OnRemoveFromPnq = (key) => ViewModel.RemoveFromPnq(key);
 
         ViewModel.OnFlowStateChanged += (s, flowState) =>
         {

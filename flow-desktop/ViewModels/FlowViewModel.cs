@@ -24,6 +24,10 @@ namespace flow_desktop.ViewModels
         
         private readonly NextSongManager _nextSongManager;
         
+        private readonly PlayNextQueueManager _playNextQueueManager = new();
+        public bool HasNextSong => _playNextQueueManager.HasNextSong;
+        public IReadOnlyList<PnqItem> PlayNextQueue => _playNextQueueManager.Queue;
+        
         private readonly FlowApiDataSource _flowDS;
         private readonly FlowRepository _flowRepo;
 
@@ -80,6 +84,26 @@ namespace flow_desktop.ViewModels
             await HandleNextSongPlay(song.Id);
         };
         
+        public Action<SongSearchItem> PlaySongNext => (song) =>
+        {
+            _playNextQueueManager.AddNext(song);
+        };
+
+        public Action<SongSearchItem> IncludeSong => (song) =>
+        {
+            _playNextQueueManager.Include(song);
+        };
+        
+        public void ClearPlayNextQueue()
+        {
+            _playNextQueueManager.Clear();
+        }
+        
+        public void RemoveFromPnq(string key)
+        {
+            _playNextQueueManager.Remove(key);
+        }
+        
         public void ToggleRepeat()
         {
             _repeatSongManager.ToggleRepeat();
@@ -105,7 +129,9 @@ namespace flow_desktop.ViewModels
                 fetchSpecificSong: _flowRepo.FetchSpecificSong,
                 fetchPlaylistSong: _flowRepo.FetchPlaylistSong,
                 fetchDefaultSong: _flowRepo.FetchDefaultSong,
-                getActivePlaylistId: GetActivePlaylistId
+                getActivePlaylistId: GetActivePlaylistId,
+                hasQueuedSong: () => _playNextQueueManager.HasNextSong,
+                popNextInQueue: _playNextQueueManager.GetNextSong
             );
             
             SongSearchManager = new SongSearchManager(
@@ -121,6 +147,13 @@ namespace flow_desktop.ViewModels
             
  
             _songPlayer = new SongPlayer();
+            
+            _playNextQueueManager.OnQueueChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(HasNextSong));
+                OnPropertyChanged(nameof(PlayNextQueue));
+            };
+            
             _songPlayer.OnPlayerStateChanged += (sender, ps) =>
             {
                 if (ps == null) return;

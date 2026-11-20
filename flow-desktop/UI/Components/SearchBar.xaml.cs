@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace flow_desktop.UI.Components
     //  add local listen count db
     public sealed partial class SearchBar : UserControl
     {
+        private ObservableCollection<SongSearchItem>? _songSearchResults;
+        
         private static readonly DependencyProperty dependencyPropOnSearch =
             DependencyProperty.Register(
                 nameof(OnSearch),
@@ -54,7 +57,52 @@ namespace flow_desktop.UI.Components
             get => (Action<SongSearchItem>)GetValue(dependencyPropOnPlaySong);
             set => SetValue(dependencyPropOnPlaySong, value);
         }
+        
+        private static readonly DependencyProperty dependencyPropOnPlayNext =
+            DependencyProperty.Register(
+                nameof(OnPlayNext),
+                typeof(Action<SongSearchItem>),
+                typeof(SearchBar),
+                new PropertyMetadata(null)
+            );
 
+        public Action<SongSearchItem> OnPlayNext
+        {
+            get => (Action<SongSearchItem>)GetValue(dependencyPropOnPlayNext);
+            set => SetValue(dependencyPropOnPlayNext, value);
+        }
+        
+        private void PlaySongNext(object? sender, EventArgs e)
+        {
+            var songSearchSLI = (FrameworkElement)sender!;
+            var song = (SongSearchItem)songSearchSLI.DataContext;
+            _songSearchResults?.Remove(song);
+            OnPlayNext?.Invoke(song);
+        }
+        
+
+        private static readonly DependencyProperty dependencyPropOnInclude =
+            DependencyProperty.Register(
+                nameof(OnInclude),
+                typeof(Action<SongSearchItem>),
+                typeof(SearchBar),
+                new PropertyMetadata(null)
+            );
+
+        public Action<SongSearchItem> OnInclude
+        {
+            get => (Action<SongSearchItem>)GetValue(dependencyPropOnInclude);
+            set => SetValue(dependencyPropOnInclude, value);
+        }
+
+        private void IncludeSong(object? sender, EventArgs e)
+        {
+            var songSearchSLI = (FrameworkElement)sender!;
+            var song = (SongSearchItem)songSearchSLI.DataContext;
+            _songSearchResults?.Remove(song);
+            OnInclude?.Invoke(song);
+        }
+        
         private DispatcherTimer? _debounceTimer;
         private void OnQueryChange(object sender, TextChangedEventArgs e)
         {
@@ -122,7 +170,8 @@ namespace flow_desktop.UI.Components
                     break;
                 case SongSearchState.FoundResults found:
                     var listView = CreateSongSearchResultsListView();
-                    listView.ItemsSource = found.SongSearchResults;
+                    _songSearchResults = new ObservableCollection<SongSearchItem>(found.SongSearchResults);
+                    listView.ItemsSource = _songSearchResults;
                     SongSearchPopupContent.Content = listView;
                     break;
                 case SongSearchState.Error:

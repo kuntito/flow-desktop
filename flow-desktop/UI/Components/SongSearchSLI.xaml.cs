@@ -48,6 +48,19 @@ public sealed partial class SongSearchSLI : UserControl
         get => (string)GetValue(ArtistStrProperty);
         set => SetValue(ArtistStrProperty, value);
     }
+    
+    public event EventHandler? OnPlayNext;
+    public event EventHandler? OnInclude;
+
+    private void PlayNext(object sender, RoutedEventArgs e)
+    {
+        OnPlayNext?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Include(object sender, RoutedEventArgs e)
+    {
+        OnInclude?.Invoke(this, EventArgs.Empty);
+    }
 
     public SongSearchSLI()
     {

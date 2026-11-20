@@ -13,9 +13,17 @@
         Height="48"
         VerticalAlignment="Center"
         >
+        <Grid.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                    Text="play next"
+                    Click="PlayNext"/>
+            </MenuFlyout>
+        </Grid.ContextFlyout>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <components:AlbumArtSLI
@@ -25,6 +33,21 @@
             Grid.Column="1"
             SongTitle="{x:Bind SongTitle, Mode=OneWay}"
             ArtistStr="{x:Bind ArtistStr, Mode=OneWay}"/>
+        
+        <Button
+            Grid.Column="2"
+            Width="40"
+            Height="40"
+            Padding="0"
+            CornerRadius="20"
+            Background="Transparent"
+            BorderThickness="0"
+            Click="Include">
+            <Image
+                Source="ms-appx:///Assets/ic_queue_song.png"
+                Width="24"
+                Height="24"/>
+        </Button>
 
     </Grid>
 </UserControl>

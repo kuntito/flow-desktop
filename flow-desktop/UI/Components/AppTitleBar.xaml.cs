@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.UI.Xaml.Input;
@@ -100,7 +101,91 @@ public sealed partial class AppTitleBar : UserControl, INotifyPropertyChanged
         get => (bool)GetValue(IsActivePlaylistAutoProperty);
         set => SetValue(IsActivePlaylistAutoProperty, value);
     }
+    
+    public static readonly DependencyProperty HasNextSongProperty =
+        DependencyProperty.Register(
+            nameof(HasNextSong),
+            typeof(bool),
+            typeof(AppTitleBar),
+            new PropertyMetadata(false)
+        );
 
+    public bool HasNextSong
+    {
+        get => (bool)GetValue(HasNextSongProperty);
+        set => SetValue(HasNextSongProperty, value);
+    }
+
+    private double OpacityFor(bool hasNextSong)
+    {
+        return hasNextSong ? 1.0 : 0.0;
+    }
+    
+    private void ClosePlayNextQueue(object sender, RoutedEventArgs e)
+    {
+        PnqFlyout.Hide();
+    }
+
+    public Action? OnOpenPlayNextQueue { get; set; }
+
+    private void OpenPlayNextQueue(object sender, RoutedEventArgs e)
+    {
+        OnOpenPlayNextQueue?.Invoke();
+    }
+    
+    private static readonly DependencyProperty dependencyPropOnPlayNext =
+        DependencyProperty.Register(
+            nameof(OnPlayNext),
+            typeof(Action<SongSearchItem>),
+            typeof(AppTitleBar),
+            new PropertyMetadata(null)
+        );
+
+    public Action<SongSearchItem> OnPlayNext
+    {
+        get => (Action<SongSearchItem>)GetValue(dependencyPropOnPlayNext);
+        set => SetValue(dependencyPropOnPlayNext, value);
+    }
+
+
+    private static readonly DependencyProperty dependencyPropOnInclude =
+        DependencyProperty.Register(
+            nameof(OnInclude),
+            typeof(Action<SongSearchItem>),
+            typeof(AppTitleBar),
+            new PropertyMetadata(null)
+        );
+
+    public Action<SongSearchItem> OnInclude
+    {
+        get => (Action<SongSearchItem>)GetValue(dependencyPropOnInclude);
+        set => SetValue(dependencyPropOnInclude, value);
+    }
+    
+    public static readonly DependencyProperty PlayNextQueueProperty =
+        DependencyProperty.Register(
+            nameof(PlayNextQueue),
+            typeof(IReadOnlyList<PnqItem>),
+            typeof(AppTitleBar),
+            new PropertyMetadata(null)
+        );
+
+    public IReadOnlyList<PnqItem> PlayNextQueue
+    {
+        get => (IReadOnlyList<PnqItem>)GetValue(PlayNextQueueProperty);
+        set => SetValue(PlayNextQueueProperty, value);
+    }
+    
+    public Action<string>? OnRemoveFromPnq { get; set; }
+
+    private void RemoveFromPnq(object? sender, EventArgs e)
+    {
+        var playNextQueueSLI = (FrameworkElement)sender!;
+        var pnqItem = (PnqItem)playNextQueueSLI.DataContext;
+        OnRemoveFromPnq?.Invoke(pnqItem.Key);
+    }
+
+    
     private ImageSource IconFor(bool isAuto)
     {
         var iconPath = isAuto
@@ -162,6 +247,14 @@ public sealed partial class AppTitleBar : UserControl, INotifyPropertyChanged
     private void GoToPlaylists(object sender, RoutedEventArgs e)
     {
         OnGoToPlaylists?.Invoke();
+    }
+    
+    public Action? OnClearPlayNextQueue { get; set; }
+
+    private void ClearPlayNextQueue(object sender, RoutedEventArgs e)
+    {
+        PnqFlyout.Hide();
+        OnClearPlayNextQueue?.Invoke();
     }
     
     public AppTitleBar()
