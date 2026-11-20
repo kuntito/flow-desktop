@@ -80,6 +80,7 @@ namespace flow_desktop.Helpers
             SetQueue(newQueue);
         }
 
+        // TODO impl this in UI, double click to play a song.
         public SongSearchItem? CherryPickAndTrim(int itemIndex)
         {
             var isValidIndex = itemIndex >= 0 && itemIndex < _queue.Count;
