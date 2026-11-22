@@ -97,11 +97,13 @@ namespace flow_desktop.Services
             }
         }
         
-        public async Task<GetCatalogueResponse?> SafeGetCatalogue()
+        public async Task<GetCatalogueResponse?> SafeSyncCatalog(
+            List<SyncRecencyItem> recencyItems
+        )
         {
             return await SafeApiCall(
-                "returns the server's catalogue",
-                () => _flowApi.GetCatalogue()
+                "sends local recencies, returns the merged catalog",
+                () => _flowApi.SyncCatalog(recencyItems)
             );
         }
     }

@@ -17,6 +17,26 @@ namespace flow_desktop.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.34");
 
+            modelBuilder.Entity("flow_desktop.Data.CatalogCacheItem", b =>
+                {
+                    b.Property<int>("SongId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("FileSizeBytes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Recency")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SongId");
+
+                    b.ToTable("catalog_cache");
+                });
+
             modelBuilder.Entity("flow_desktop.Data.LocalCatalog", b =>
                 {
                     b.Property<int>("SongId")

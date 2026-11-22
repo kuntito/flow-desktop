@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,33 +12,144 @@ namespace flow_desktop.Services
 {
     public class FlowRepository(
         FlowApiDataSource flowDS,
-        LocalCatalogDao localCatalogDao
+        LocalCatalogDao localCatalogDao,
+        CatalogCache catalogCache
     )
     {
+        private async Task<Song?> GetSongByIdLocal(int songId)
+        {
+            LocalCatalog? catalogItem = await localCatalogDao.GetBySongId(songId);
+            if (catalogItem == null) return null;
+            if (catalogItem.DurationMillis == null) return null;
+
+            string? cachedPath = await catalogCache.GetCachedPath(songId);
+            if (cachedPath == null) return null;
+            
+            var localSong = new Song
+            {
+                Id = catalogItem.SongId,
+                Title = catalogItem.SongTitle,
+                ArtistStr = catalogItem.SongArtistName,
+                DurationMillis = catalogItem.DurationMillis.Value,
+                AlbumArtUrl = catalogItem.AlbumArtUrl,
+                CachedFilePath = cachedPath,
+            };
+
+            return localSong;
+        }
+        
+        /// <summary>
+        /// the point is to attach a song to its filepath
+        /// if one exists, else it assigns null.
+        ///
+        /// and behind the scenes, tries to download the song
+        /// so it's ready for next time.
+        /// </summary>
+        private async Task<Song> AttachFileOrDownload(SongWithUrl songWithUrl)
+        {
+            string? cachedPath = await catalogCache.GetFilePathOrDownload(
+                songId: songWithUrl.Id,
+                songUrl: songWithUrl.SongUrl
+            );
+
+            Song song = songWithUrl.ToSong();
+            song.CachedFilePath = cachedPath;
+
+            return song;
+        }
+        
+        /// <summary>
+        /// returns a specific song.
+        /// plays from disk if the song is cached, no network needed.
+        /// otherwise fetches from the server.
+        /// </summary>
         public async Task<Song?> FetchSpecificSong(int songId)
         {
+            Song? localSong = await GetSongByIdLocal(songId);
+            if (localSong != null) return localSong;
+            
             GetSongByIdResponse? response = await flowDS.SafeGetSongById(songId);
+            SongWithUrl? songWithUrl = response?.SongWithUrl;
+            if (songWithUrl == null) return null;
+            
+            Song song = await AttachFileOrDownload(songWithUrl);
 
-            return response?.SongWithUrl?.ToSong();
+            return song;
         }
 
+        // TODO, when you implement playlist data living on PC
+        //  rather than being fetched, you might wanna get the song id
+        //  and use fetch specific song.
         public async Task<Song?> FetchPlaylistSong(int playlistId)
         {
             GetPlaylistNextSongResponse? response = await flowDS.SafeGetPlaylistNextSong(playlistId);
+            SongWithUrl? songWithUrl = response?.SongWithUrl;
+            if (songWithUrl == null) return null;
 
-            return response?.SongWithUrl?.ToSong();
+            Song song = await AttachFileOrDownload(songWithUrl);
+
+            return song;
+        }
+        
+        /// <summary>
+        /// picks the next default song from disk, least recently played first.
+        ///
+        /// pool size is how many cached songs there must be before this kicks in.
+        /// with too few, the same handful would keep coming back around.
+        ///
+        /// so returns null as something failed or not enough songs.
+        /// </summary>
+        private async Task<Song?> GetDefaultSongLocal()
+        {
+            const int poolSize = 100;
+
+            int cachedCount = await catalogCache.Count();
+            if (cachedCount < poolSize) return null;
+
+            int? songId = await catalogCache.GetLeastRecentSongId();
+            if (songId == null) return null;
+
+            Song? localSong = await GetSongByIdLocal(songId.Value);
+
+            return localSong;
         }
 
         public async Task<Song?> FetchDefaultSong()
         {
-            GetNextSongResponse? response = await flowDS.SafeFetchNextSong();
+            Song? localSong = await GetDefaultSongLocal();
+            if (localSong != null) return localSong;
 
-            return response?.SongWithUrl?.ToSong();
+            GetNextSongResponse? response = await flowDS.SafeFetchNextSong();
+            SongWithUrl? songWithUrl = response?.SongWithUrl;
+            if (songWithUrl == null) return null;
+
+            Song song = await AttachFileOrDownload(songWithUrl);
+
+            return song;
         }
         
-        public async Task RefreshLocalCatalog()
+        public async Task UpdateRecency(int songId)
         {
-            GetCatalogueResponse? response = await flowDS.SafeGetCatalogue();
+            long recency = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            await localCatalogDao.SetRecency(
+                songId: songId,
+                recency: recency
+            );
+        }
+        
+        public async Task SyncLocalCatalog()
+        {
+            List<LocalCatalog> rowsWithRecency = await localCatalogDao.GetAllRecencies();
+
+            var recencyItems = rowsWithRecency
+                .Select(row => new SyncRecencyItem(
+                    SongId: row.SongId,
+                    Recency: row.Recency!.Value
+                ))
+                .ToList();
+
+            GetCatalogueResponse? response = await flowDS.SafeSyncCatalog(recencyItems);
 
             List<CatalogSong>? catalogSongs = response?.Songs;
             if (catalogSongs == null) return;

@@ -41,5 +41,39 @@ namespace flow_desktop.Data
 
             return matches;
         }
+        
+        public async Task<LocalCatalog?> GetBySongId(int songId)
+        {
+            await using var db = new FlowDb();
+
+            var catalogItem = await db.LocalCatalog.FindAsync(songId);
+
+            return catalogItem;
+        }
+        
+        public async Task SetRecency(int songId, long recency)
+        {
+            await using var db = new FlowDb();
+
+            await db.LocalCatalog
+                .Where(item => item.SongId == songId)
+                .ExecuteUpdateAsync(setters =>
+                    setters.SetProperty(
+                        item => item.Recency,
+                        recency
+                    )
+                );
+        }
+
+        public async Task<List<LocalCatalog>> GetAllRecencies()
+        {
+            await using var db = new FlowDb();
+
+            var rowsWithRecency = await db.LocalCatalog
+                .Where(item => item.Recency != null)
+                .ToListAsync();
+
+            return rowsWithRecency;
+        }
     }
 }

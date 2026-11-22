@@ -122,7 +122,10 @@ namespace flow_desktop.ViewModels
             _flowDS = new FlowApiDataSource();
             _flowRepo = new FlowRepository(
                 flowDS: _flowDS,
-                localCatalogDao: new LocalCatalogDao()
+                localCatalogDao: new LocalCatalogDao(),
+                catalogCache: new CatalogCache(
+                    catalogCacheDao: new CatalogCacheDao()
+                )
             );
             
             _nextSongManager = new NextSongManager(
@@ -131,7 +134,8 @@ namespace flow_desktop.ViewModels
                 fetchDefaultSong: _flowRepo.FetchDefaultSong,
                 getActivePlaylistId: GetActivePlaylistId,
                 hasQueuedSong: () => _playNextQueueManager.HasNextSong,
-                popNextInQueue: _playNextQueueManager.GetNextSong
+                popNextInQueue: _playNextQueueManager.GetNextSong,
+                updateRecency: _flowRepo.UpdateRecency
             );
             
             SongSearchManager = new SongSearchManager(
@@ -185,7 +189,7 @@ namespace flow_desktop.ViewModels
             
             // underscore keeps IDE quiet, behavior stays the same without it
             _ = LoadPlaylists();
-            _ = _flowRepo.RefreshLocalCatalog();
+            _ = _flowRepo.SyncLocalCatalog();
         }
         
 

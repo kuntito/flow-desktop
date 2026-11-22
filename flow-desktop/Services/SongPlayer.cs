@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,11 +62,32 @@ namespace flow_desktop.Services
                 });
             };
         }
+        
+        private static Uri GetSourceUri(Song song)
+        {
+            string? cachedFilePath = song.CachedFilePath;
+            bool isFileOnDisk = cachedFilePath != null && File.Exists(cachedFilePath);
+
+            if (isFileOnDisk) return new Uri(cachedFilePath!);
+
+            return new Uri(song.SongUrl);
+        }
 
         public void Play(Song song)
         {
+            Uri sourceUri;
+            try
+            {
+                // in case song url is blank
+                sourceUri = GetSourceUri(song);
+            }
+            catch (UriFormatException)
+            {
+                return;
+            }
+            
             _mediaPlayer.Source = MediaSource.CreateFromUri(
-                new Uri(song.SongUrl)
+                sourceUri
             );
             _mediaPlayer.Play();
             _positionTimer.Start();

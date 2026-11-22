@@ -14,6 +14,8 @@ namespace flow_desktop.Models
         public int DurationMillis { get; set; }
         public string? AlbumArtUrl { get; set; }
         public string SongUrl { get; set; } = string.Empty;
+        public string? CachedFilePath { get; set; }
+        
 
         public static Song DummySong => new Song
         {

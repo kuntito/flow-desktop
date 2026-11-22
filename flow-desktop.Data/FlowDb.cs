@@ -7,6 +7,7 @@ namespace flow_desktop.Data
     public class FlowDb : DbContext
     {
         public DbSet<LocalCatalog> LocalCatalog => Set<LocalCatalog>();
+        public DbSet<CatalogCacheItem> CatalogCache { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

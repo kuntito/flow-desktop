@@ -24,7 +24,8 @@ namespace flow_desktop.Helpers
         Func<Task<Song?>> fetchDefaultSong,
         Func<int?> getActivePlaylistId,
         Func<bool> hasQueuedSong,
-        Func<SongSearchItem?> popNextInQueue
+        Func<SongSearchItem?> popNextInQueue,
+        Func<int, Task> updateRecency
     )
     {
         public async Task<Song?> GetNextSong(int? prioritySongId = null)
@@ -77,6 +78,11 @@ namespace flow_desktop.Helpers
                         Song: defaultSong,
                         Source: NextSongSource.ApiDefault
                     );
+            }
+
+            if (nextSongItem != null)
+            {
+                await updateRecency(nextSongItem.Song.Id);
             }
 
             Debug.WriteLine($"getNextSong: {nextSongItem?.Song.Title}, source: {nextSongItem?.Source}");

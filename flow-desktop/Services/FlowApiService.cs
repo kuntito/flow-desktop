@@ -108,11 +108,28 @@ namespace flow_desktop.Services
             return await response.Content.ReadFromJsonAsync<GetPlaylistNextSongResponse>();
         }
         
-        public async Task<GetCatalogueResponse?> GetCatalogue()
+        public class SyncCatalogBody
         {
-            return await _client.GetFromJsonAsync<GetCatalogueResponse>(
-                "api/flow/cache-song-search"
+            public List<SyncRecencyItem> RecencyItems { get; set; } = new();
+        }
+        
+        public async Task<GetCatalogueResponse?> SyncCatalog(
+            List<SyncRecencyItem> recencyItems
+        )
+        {
+            var body = new SyncCatalogBody
+            {
+                RecencyItems = recencyItems,
+            };
+
+            var response = await _client.PostAsJsonAsync(
+                "api/flow/cache-song-search/sync",
+                body
             );
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<GetCatalogueResponse>();
         }
     }
 }
