@@ -224,7 +224,16 @@ namespace flow_desktop.UI.Components
 
             OnPlaySong?.Invoke(song);
         }
-            
+        
+        private void FocusSearch(
+            KeyboardAccelerator sender,
+            KeyboardAcceleratorInvokedEventArgs args
+        )
+        {
+            SearchTextBox.Focus(FocusState.Keyboard);
+            args.Handled = true;
+        }
+
             
         public SearchBar()
         {

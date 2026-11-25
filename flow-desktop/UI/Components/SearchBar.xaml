@@ -8,6 +8,13 @@
     xmlns:components="using:flow_desktop.UI.Components"
     xmlns:models="using:flow_desktop.Models"
     mc:Ignorable="d">
+    
+    <UserControl.KeyboardAccelerators>
+        <KeyboardAccelerator
+            Modifiers="Control"
+            Key="L"
+            Invoked="FocusSearch"/>
+    </UserControl.KeyboardAccelerators>
 
     <UserControl.Resources>
         <x:Double x:Key="SearchBarWidth">444</x:Double>
