@@ -64,6 +64,7 @@
                     BorderThickness="0"
                     FontSize="18"
                     TextChanged="OnQueryChange"
+                    PreviewKeyDown="OnSearchPreviewKeyDown"
                 >
                     <TextBox.Resources>
                         <!-- to make text box transparent in all states -->

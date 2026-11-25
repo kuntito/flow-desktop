@@ -16,6 +16,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using ABI.Microsoft.UI;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -150,6 +151,7 @@ namespace flow_desktop.UI.Components
         private void UpdateSearchStateVisuals()
         {
             SongSearchResultsPopup.IsOpen = dependencyWrapperSongSearchState is not SongSearchState.Idle;
+            _songSearchResultsListView = null;
 
             switch (dependencyWrapperSongSearchState)
             {
@@ -173,6 +175,7 @@ namespace flow_desktop.UI.Components
                     _songSearchResults = new ObservableCollection<SongSearchItem>(found.SongSearchResults);
                     listView.ItemsSource = _songSearchResults;
                     SongSearchPopupContent.Content = listView;
+                    _songSearchResultsListView = listView;
                     break;
                 case SongSearchState.Error:
                     // TODO snackbar instead...
@@ -209,6 +212,15 @@ namespace flow_desktop.UI.Components
             return listView;
         }
         
+        private void OnSongPlay(SongSearchItem song)
+        {
+            SongSearchResultsPopup.IsOpen = false;
+            SearchTextBox.Text = "";
+
+            OnPlaySong?.Invoke(song);
+        }
+
+        
         /// <summary>
         /// double-tapping a result plays it, and closes the results.
         /// </summary>
@@ -219,10 +231,48 @@ namespace flow_desktop.UI.Components
 
             if (song == null) return;
 
-            SongSearchResultsPopup.IsOpen = false;
-            SearchTextBox.Text = "";
+            OnSongPlay(song);
+        }
+        
+        private ListView? _songSearchResultsListView;
 
-            OnPlaySong?.Invoke(song);
+        private static void MoveHighlight(ListView listView, int step)
+        {
+            var lastIndex = listView.Items.Count - 1;
+            var nextIndex = Math.Clamp(
+                listView.SelectedIndex + step,
+                0,
+                lastIndex
+            );
+
+            listView.SelectedIndex = nextIndex;
+            listView.ScrollIntoView(listView.SelectedItem);
+        }
+
+        private void OnSearchPreviewKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            var listView = _songSearchResultsListView;
+            if (listView == null) return;
+            if (listView.Items.Count == 0) return;
+
+            switch (e.Key)
+            {
+                case VirtualKey.Down:
+                    MoveHighlight(listView, 1);
+                    e.Handled = true;
+                    break;
+                case VirtualKey.Up:
+                    MoveHighlight(listView, -1);
+                    e.Handled = true;
+                    break;
+                case VirtualKey.Enter:
+                    if (listView.SelectedItem is SongSearchItem song)
+                    {
+                        OnSongPlay(song);
+                        e.Handled = true;
+                    }
+                    break;
+            }
         }
         
         private void FocusSearch(
