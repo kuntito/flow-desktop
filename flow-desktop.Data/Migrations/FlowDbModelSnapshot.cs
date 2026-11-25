@@ -37,6 +37,46 @@ namespace flow_desktop.Data.Migrations
                     b.ToTable("catalog_cache");
                 });
 
+            modelBuilder.Entity("flow_desktop.Data.ListenHistoryCursor", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurSeq")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("listen_history_cursor");
+                });
+
+            modelBuilder.Entity("flow_desktop.Data.ListenHistoryItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("ListenedAtMillis")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.ToTable("listen_history");
+                });
+
             modelBuilder.Entity("flow_desktop.Data.LocalCatalog", b =>
                 {
                     b.Property<int>("SongId")

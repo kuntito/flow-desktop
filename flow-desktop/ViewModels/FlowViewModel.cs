@@ -125,7 +125,8 @@ namespace flow_desktop.ViewModels
                 localCatalogDao: new LocalCatalogDao(),
                 catalogCache: new CatalogCache(
                     catalogCacheDao: new CatalogCacheDao()
-                )
+                ),
+                listenHistoryDao: new ListenHistoryDao()
             );
             
             _nextSongManager = new NextSongManager(
@@ -151,6 +152,11 @@ namespace flow_desktop.ViewModels
             
  
             _songPlayer = new SongPlayer();
+            
+            _songPlayer.OnSongListened += (sender, songId) =>
+            {
+                _ = _flowRepo.LogListen(songId);
+            };
             
             _playNextQueueManager.OnQueueChanged += (s, e) =>
             {
@@ -178,7 +184,14 @@ namespace flow_desktop.ViewModels
                 if (shouldRepeatSong)
                 {
                     OnPropertyChanged(nameof(RepeatCount));
-                    PlayFromStart();
+                    
+                    Song? loadedSong = LoadedSong;
+                    if (loadedSong != null)
+                    {
+                        // `HandleNextSongPlay`, resets repeats
+                        //  hence, the direct call of `PlaySong`.
+                        await PlaySong(loadedSong);
+                    }
                 }
                 else
                 {
@@ -190,12 +203,17 @@ namespace flow_desktop.ViewModels
             // underscore keeps IDE quiet, behavior stays the same without it
             _ = LoadPlaylists();
             _ = _flowRepo.SyncLocalCatalog();
+            _ = _flowRepo.SyncListenHistory();
         }
         
 
-        private void PlaySong(Song song)
+        private async Task PlaySong(Song song)
         {
-            _songPlayer.Play(song);
+            Song songToPlay = song.CachedFilePath == null
+                ? await _flowRepo.EnrichWithFilepath(song)
+                : song;
+
+            _songPlayer.Play(songToPlay);
         }
 
         public void PlayLoadedSong()
@@ -211,12 +229,6 @@ namespace flow_desktop.ViewModels
         public void SeekTo(float progress)
         {
             _songPlayer.SeekTo(progress);
-        }
-        
-        private void PlayFromStart()
-        {
-            SeekTo(0f);
-            PlayLoadedSong();
         }
         
         public async Task PlayNextSong()
@@ -384,7 +396,7 @@ namespace flow_desktop.ViewModels
                     return;
                 }
 
-                PlaySong(nextSong);
+                await PlaySong(nextSong);
 
                 var isAlreadyPlaying = _flowState == FlowPlaybackState.Playing;
                 if (!isAlreadyPlaying)

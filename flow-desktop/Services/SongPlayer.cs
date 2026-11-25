@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using flow_desktop.Helpers;
 using flow_desktop.Models;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Dispatching;
@@ -25,6 +26,8 @@ namespace flow_desktop.Services
         private readonly DispatcherTimer _positionTimer;
         public event EventHandler<PlayerState?> OnPlayerStateChanged;
         public event EventHandler? OnPlaybackComplete;
+        public event EventHandler<int>? OnSongListened;
+        private PlaybackCheckpoints? _playbackCheckpoints;
 
         public SongPlayer()
         {
@@ -36,10 +39,14 @@ namespace flow_desktop.Services
 
             _positionTimer.Tick += (s, e) =>
             {
+                int positionMs = (int)_mediaPlayer.Position.TotalMilliseconds;
+                
                 UpdatePlayerState(ps =>
                 {
-                    ps.CurrentPositionMs = (int)_mediaPlayer.Position.TotalMilliseconds;
+                    ps.CurrentPositionMs = positionMs;
                 });
+                
+                _playbackCheckpoints?.UpdateCheckpoints(positionMs);
             };
 
             
@@ -85,6 +92,12 @@ namespace flow_desktop.Services
             {
                 return;
             }
+            
+            _playbackCheckpoints = new PlaybackCheckpoints(
+                songId: song.Id,
+                durationMs: song.DurationMillis,
+                onSongListened: (songId) => OnSongListened?.Invoke(this, songId)
+            );
             
             _mediaPlayer.Source = MediaSource.CreateFromUri(
                 sourceUri

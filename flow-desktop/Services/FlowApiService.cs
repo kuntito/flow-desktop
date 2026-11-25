@@ -131,6 +131,33 @@ namespace flow_desktop.Services
 
             return await response.Content.ReadFromJsonAsync<GetCatalogueResponse>();
         }
+        
+        public class SyncListenHistoryBody
+        {
+            public List<ListenEvent> Events { get; set; } = new();
+            public int AfterSeq { get; set; }
+        }
+
+        public async Task<SyncListenHistoryResponse?> SyncListenHistory(
+            List<ListenEvent> events,
+            int afterSeq
+        )
+        {
+            var body = new SyncListenHistoryBody
+            {
+                Events = events,
+                AfterSeq = afterSeq,
+            };
+
+            var response = await _client.PostAsJsonAsync(
+                "api/flow/listen-history/sync",
+                body
+            );
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<SyncListenHistoryResponse>();
+        }
     }
 }
     

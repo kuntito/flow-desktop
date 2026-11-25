@@ -54,4 +54,12 @@ namespace flow_desktop.Models
 
         public Dictionary<string, string>? Debug { get; set; }
     }
+    
+    public class SyncListenHistoryResponse
+    {
+        public bool Success { get; set; }
+        public int? LatestSeq { get; set; }
+        public int? ItemCount { get; set; }
+        public List<ListenEvent>? Events { get; set; }
+    }
 }

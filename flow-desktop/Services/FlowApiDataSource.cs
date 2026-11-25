@@ -106,5 +106,16 @@ namespace flow_desktop.Services
                 () => _flowApi.SyncCatalog(recencyItems)
             );
         }
+        
+        public async Task<SyncListenHistoryResponse?> SafeSyncListenHistory(
+            List<ListenEvent> events,
+            int afterSeq
+        )
+        {
+            return await SafeApiCall(
+                "pushes unsynced listens, then fetches listens after the cursor",
+                () => _flowApi.SyncListenHistory(events, afterSeq)
+            );
+        }
     }
 }
